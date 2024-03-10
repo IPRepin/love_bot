@@ -1,0 +1,10 @@
+__pycache__/
+local_settings.py
+.env
+env/
+venv/
+.idea
+bot/test.py
+misc/test.py
+refresh_token.txt
+access_token.txt
