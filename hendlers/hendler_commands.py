@@ -30,6 +30,7 @@ async def get_start(message: types.Message) -> None:
                              )
     except (sqlite3.IntegrityError, sqlite3.OperationalError) as err:
         logger.error(err)
-        await message.answer(f"С возвращением {message.from_user.first_name}\n",
+        await message.answer(f"С возвращением {message.from_user.first_name}\n"
+                             f"Хочеш запонить еще одну анкету?",
                              reply_markup=main_markup
                              )

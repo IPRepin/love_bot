@@ -13,13 +13,22 @@ class MensQuestionnaires(DatabaseConnect):
           age INTEGER NOT NULL,
           about_me TEXT NOT NULL,
           finding VARCHAR(50) NOT NULL,
-          status BOOLEAN NOT NULL,
+          status VARCHAR(10) NOT NULL,
           PRIMARY KEY (user_id)
         );"""
         self.execute(sql, commit=True)
 
-    # def add_questionnaire(self, user_id: int, user_name: str, phone: str,
-        #                   ):
-        # sql = "INSERT INTO Patient (user_id, user_name, phone) VALUES (?, ?, ?)"
-        # parameters = (user_id, user_name, phone)
-        # self.execute(sql, parameters, commit=True)
+    def add_questionnaire(self,
+                          user_id: int,
+                          user_name: str,
+                          photo: str,
+                          gender: str,
+                          age: int,
+                          about_me: str,
+                          finding: str,
+                          status: str
+                          ):
+        sql = ("INSERT INTO Mensquestionnaires (user_id,"
+               "user_name, photo, gender, age, about_me, finding, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+        parameters = (user_id, user_name, photo, gender, age, about_me, finding, status)
+        self.execute(sql, parameters, commit=True)
