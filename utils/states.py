@@ -6,6 +6,7 @@ class MenQuestionnaire(StatesGroup):
     Модуль определения состояний для машины состояний мужских анкет
     """
     PHOTO = State()
+    GENDER = State()
     NAME = State()
     AGE = State()
     ABOUT_ME = State()
