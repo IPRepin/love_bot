@@ -3,7 +3,7 @@ import logging
 import os
 
 from aiogram import Bot, Dispatcher
-from aiogram.exceptions import TelegramNetworkError
+from aiogram.exceptions import TelegramNetworkError, TelegramRetryAfter
 from dotenv import load_dotenv
 
 from data.sqlite_db_users import DatabaseUsers
@@ -56,5 +56,7 @@ if __name__ == '__main__':
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     try:
         asyncio.run(connect_telegram())
+    except TelegramRetryAfter as error:
+        logger.error(error)
     except KeyboardInterrupt:
         logger.info('Bot interrupted')
