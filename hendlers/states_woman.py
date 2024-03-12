@@ -9,7 +9,8 @@ from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
-from keyboards.replay import replay_keyboard
+from keyboards.inline import channel_markup
+from keyboards.replay import replay_keyboard, rmk
 from utils.states import WomanQuestionnaire
 
 woman_questionnaires_router = Router()
@@ -90,6 +91,10 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
         photo,
         "\n".join(form_msg[1:]),
     )
+    await message.answer('****', reply_markup=rmk)
+    await message.answer(f"{data.get('name')}\n"
+                         f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
+                         reply_markup=channel_markup)
     try:
         db.add_profile(
             user_id=message.from_user.id,

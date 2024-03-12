@@ -25,12 +25,20 @@ async def get_start(message: types.Message) -> None:
             user_url=message.from_user.url
         )
         await message.answer(f"Привет {message.from_user.first_name}😄\n"
-                             f"Давай начнем знакомство?\n",
+                             f"Давай начнем знакомство?\n"
+                             f"\n"
+                             f"<i>Продолжая, вы принимаете\n"
+                             f"<a href='https://ya.ru'>Пользовательское соглашение</a>\n"
+                             f"и <a href='https://ya.ru'>Политику конфиде нциальности</a>.</i>",
                              reply_markup=main_markup
                              )
     except (sqlite3.IntegrityError, sqlite3.OperationalError) as err:
         logger.error(err)
         await message.answer(f"С возвращением {message.from_user.first_name}\n"
-                             f"Хочеш запонить еще одну анкету?",
+                             f"Хочеш запонить еще одну анкету❓\n"
+                             f"\n"
+                             f"<i>Продолжая, вы принимаете\n"
+                             f"<a href='https://ya.ru'>Пользовательское соглашение</a> "
+                             f"и <a href='https://ya.ru'>Политику конфиденциальности</a>.</i>",
                              reply_markup=main_markup
                              )

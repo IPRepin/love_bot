@@ -12,6 +12,7 @@ from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.hendler_commands import router_commands
 from hendlers.states_man import men_questionnaires_router
 from hendlers.states_woman import woman_questionnaires_router
+from hendlers.user_hendlers import main_users_router
 from utils.commands import register_commands
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ async def connect_telegram():
     dp.include_routers(router_commands,
                        men_questionnaires_router,
                        woman_questionnaires_router,
+                       main_users_router,
                        )
     create_tables()
     try:

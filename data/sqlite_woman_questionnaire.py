@@ -20,6 +20,8 @@ class WomanQuestionnaires(DatabaseConnect):
         self.execute(sql, commit=True)
 
     def add_profile(self, user_id, photo, user_name, gender, age, about_me, finding, status, moderation=None):
-        sql = "INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age, about_me, finding, status, moderation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        sql = ("INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age, "
+               "about_me, finding, status, moderation)"
+               " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
         parameters = (user_id, photo, user_name, gender, age, about_me, finding, status, moderation)
         self.execute(sql, parameters, commit=True)

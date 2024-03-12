@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 main_markup = ReplyKeyboardMarkup(keyboard=[
@@ -28,3 +28,6 @@ async def status_keyboard(text: str | list):
         text = [text]
     [builder.button(text=txt, callback_data=txt) for txt in text]
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+rmk = ReplyKeyboardRemove()
