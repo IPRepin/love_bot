@@ -19,8 +19,7 @@ class WomanQuestionnaires(DatabaseConnect):
         );"""
         self.execute(sql, commit=True)
 
-    # def add_questionnaire(self, user_id: int, user_name: str, phone: str,
-        #                   ):
-        # sql = "INSERT INTO Patient (user_id, user_name, phone) VALUES (?, ?, ?)"
-        # parameters = (user_id, user_name, phone)
-        # self.execute(sql, parameters, commit=True)
+    def add_profile(self, user_id, photo, user_name, gender, age, about_me, finding, status, moderation=None):
+        sql = "INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age, about_me, finding, status, moderation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        parameters = (user_id, photo, user_name, gender, age, about_me, finding, status, moderation)
+        self.execute(sql, parameters, commit=True)

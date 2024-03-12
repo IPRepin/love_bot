@@ -101,6 +101,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
             status=data.get('status'),
             finding=data.get('gender')
         )
+        logging.info("Added profile man")
     except sqlite3.IntegrityError:
         logging.info("Пользователь уже зарегистрирован")
 

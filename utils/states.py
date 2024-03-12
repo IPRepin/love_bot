@@ -19,6 +19,7 @@ class WomanQuestionnaire(StatesGroup):
     Модуль определения состояний для машины состояний женских анкет
     """
     PHOTO = State()
+    GENDER = State()
     NAME = State()
     AGE = State()
     ABOUT_ME = State()
