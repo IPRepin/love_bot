@@ -4,8 +4,5 @@ local_settings.py
 env/
 venv/
 .idea
-bot/test.py
-misc/test.py
-refresh_token.txt
-access_token.txt
+test.py
 db_bot.db

@@ -9,12 +9,12 @@ main_markup = ReplyKeyboardMarkup(keyboard=[
         KeyboardButton(text='🙋‍♀️Заполнить женскую анкету'),
     ],
     [
-        KeyboardButton(text='💞Хочу просто подписку'),
+        KeyboardButton(text='💞Хочу подписку'),
     ],
 ], resize_keyboard=True, input_field_placeholder="Начни с заполнения анкеты⬇️", one_time_keyboard=True)
 
 
-async def find_gender_keyboard(text: str | list):
+async def replay_keyboard(text: str | list):
     builder = ReplyKeyboardBuilder()
     if isinstance(text, str):
         text = [text]
