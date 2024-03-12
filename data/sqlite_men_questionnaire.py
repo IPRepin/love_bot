@@ -23,17 +23,3 @@ class MensQuestionnaires(DatabaseConnect):
         sql = "INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age, about_me, finding, status, moderation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         parameters = (user_id, photo, user_name, gender, age, about_me, finding, status, moderation)
         self.execute(sql, parameters, commit=True)
-
-
-db = MensQuestionnaires()
-db.add_profile(
-    user_id=1,
-    photo='https://i.imgur.com/Q7XvkqF.jpg',
-    user_name='name',
-    gender='Male',
-    age=25,
-    about_me='I am a software engineer',
-    finding='I am looking for a woman',
-    status='Single',
-    moderation='Approved'
-)
