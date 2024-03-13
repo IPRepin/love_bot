@@ -1,9 +1,9 @@
 # Бот знакомств для Telegram с функцией сбора данных (анкет) пользователей. #
 
 ![Static Badge](https://img.shields.io/badge/Python-3.11-blue)
-![Static Badge](https://img.shields.io/badge/Aiogram-3.2.0-blue)
+![Static Badge](https://img.shields.io/badge/Aiogram-3.3.0-blue)
 ![Static Badge](https://img.shields.io/badge/python--dotenv-1.0-blue)
-![Static Badge](https://img.shields.io/badge/urllib3-2.1-blue)
+![Static Badge](https://img.shields.io/badge/urllib3-2.2-blue)
 ![Static Badge](https://img.shields.io/badge/SQLite-3.45.2-blue)
 
 
