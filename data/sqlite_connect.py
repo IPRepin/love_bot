@@ -1,11 +1,14 @@
 import logging
 import sqlite3
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 logger = logging.getLogger(__name__)
 
 
 class DatabaseConnect:
-    def __init__(self, path_to_db="data/db_bot.db"):
+    def __init__(self, path_to_db=os.getenv('PATH_TO_DB')):
         self.path_to_db = path_to_db
 
     @property

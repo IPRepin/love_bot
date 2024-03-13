@@ -11,7 +11,8 @@ from aiogram.fsm.context import FSMContext
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from keyboards.inline import channel_markup
 from keyboards.replay import replay_keyboard, rmk
-from utils.states import MenQuestionnaire
+from utils.auxiliary_module import administrator_text
+from utils.states import StatesQuestionnaire
 
 men_questionnaires_router = Router()
 db = MensQuestionnaires()
@@ -19,21 +20,21 @@ db = MensQuestionnaires()
 
 @men_questionnaires_router.message(F.text == '🙋‍♂️Заполнить мужскую анкету')
 async def add_photo(message: types.Message, state: FSMContext) -> None:
-    await state.set_state(MenQuestionnaire.PHOTO)
+    await state.set_state(StatesQuestionnaire.PHOTO)
     await message.answer(
         f"{message.from_user.first_name}\n"
         "Для начала загрузите свою фотографию!"
     )
 
 
-@men_questionnaires_router.message(MenQuestionnaire.PHOTO, F.photo)
+@men_questionnaires_router.message(StatesQuestionnaire.PHOTO, F.photo)
 async def add_name(message: types.Message, state: FSMContext) -> None:
     await state.update_data(photo=message.photo[-1].file_id)
-    await state.set_state(MenQuestionnaire.NAME)
+    await state.set_state(StatesQuestionnaire.NAME)
     await message.answer("Введите ваше имя:")
 
 
-@men_questionnaires_router.message(MenQuestionnaire.PHOTO, ~F.photo)
+@men_questionnaires_router.message(StatesQuestionnaire.PHOTO, ~F.photo)
 async def incorrect_photo(message: types.Message, state: FSMContext) -> None:
     await message.answer(
         f"{message.from_user.first_name}\n"
@@ -41,18 +42,18 @@ async def incorrect_photo(message: types.Message, state: FSMContext) -> None:
     )
 
 
-@men_questionnaires_router.message(MenQuestionnaire.NAME)
+@men_questionnaires_router.message(StatesQuestionnaire.NAME)
 async def add_age(message: types.Message, state: FSMContext) -> None:
     await state.update_data(name=message.text, sex='Парень')
-    await state.set_state(MenQuestionnaire.AGE)
+    await state.set_state(StatesQuestionnaire.AGE)
     await message.answer("Введите ваш возраст: ")
 
 
-@men_questionnaires_router.message(MenQuestionnaire.AGE)
+@men_questionnaires_router.message(StatesQuestionnaire.AGE)
 async def add_about(message: types.Message, state: FSMContext) -> None:
     if message.text.isdigit() and int(message.text) >= 18:
         await state.update_data(age=int(message.text))
-        await state.set_state(MenQuestionnaire.ABOUT_ME)
+        await state.set_state(StatesQuestionnaire.ABOUT_ME)
         await message.answer("Раскажите немного о себе: ")
     elif message.text.isdigit() and int(message.text) < 18:
         await message.answer("Вам должно быть 18 лет!")
@@ -60,37 +61,30 @@ async def add_about(message: types.Message, state: FSMContext) -> None:
         await message.answer("Введите возраст числом!")
 
 
-@men_questionnaires_router.message(MenQuestionnaire.ABOUT_ME)
+@men_questionnaires_router.message(StatesQuestionnaire.ABOUT_ME)
 async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await state.update_data(about_me=message.text)
-    await state.set_state(MenQuestionnaire.FIND)
+    await state.set_state(StatesQuestionnaire.FIND)
     menu = await replay_keyboard(['Парень', 'Девушка'])
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@men_questionnaires_router.message(MenQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
+@men_questionnaires_router.message(StatesQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(gender=message.text)
-    await state.set_state(MenQuestionnaire.STATUS)
+    await state.set_state(StatesQuestionnaire.STATUS)
     menu = await replay_keyboard(['Хочу', 'Не хочу'])
     await message.answer("Вы хотите чтобы ваша анкета показывалась другим пользователям?", reply_markup=menu)
 
 
-@men_questionnaires_router.message(MenQuestionnaire.STATUS, F.text.casefold().in_(['хочу', 'не хочу']))
+@men_questionnaires_router.message(StatesQuestionnaire.STATUS, F.text.casefold().in_(['хочу', 'не хочу']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(status=message.text)
     data = await state.get_data()
     await state.clear()
     photo = data.get('photo')
-    form_msg = []
-    [
-        form_msg.append(f'{key}: {value}')
-        for key, value in data.items()
-    ]
-    await message.answer_photo(
-        photo,
-        "\n".join(form_msg[1:]),
-    )
+    text = administrator_text(data)
+    await message.answer_photo(photo, text,)
     await message.answer('*****', reply_markup=rmk)
     await message.answer(f"{data.get('name')}\n"
                          f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
@@ -111,7 +105,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
         logging.info("Пользователь уже зарегистрирован")
 
 
-@men_questionnaires_router.message(MenQuestionnaire.FIND)
+@men_questionnaires_router.message(StatesQuestionnaire.FIND)
 async def incorrect_gender(message: types.Message, state: FSMContext) -> None:
     menu = await replay_keyboard(['Парень', 'Девушка'])
     await message.answer("Выберите кого вы хотите найти!", reply_markup=menu)

@@ -14,6 +14,7 @@ from hendlers.states_man import men_questionnaires_router
 from hendlers.states_woman import woman_questionnaires_router
 from hendlers.user_hendlers import main_users_router
 from utils.commands import register_commands
+from utils.logs_hendler_telegram import TelegramBotHandler
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,9 @@ async def connect_telegram():
 
 if __name__ == '__main__':
     load_dotenv()
+    telegram_log_handler = TelegramBotHandler()
     logging.basicConfig(
+        handlers=[telegram_log_handler],
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     telegram_token = os.getenv('TELEGRAM_TOKEN')

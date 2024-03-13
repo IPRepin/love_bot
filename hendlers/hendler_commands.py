@@ -1,7 +1,7 @@
 import logging
 import sqlite3
 
-from aiogram import types, Router
+from aiogram import types, Router, F
 from aiogram.filters import CommandStart
 
 from data.sqlite_db_users import DatabaseUsers
@@ -35,10 +35,15 @@ async def get_start(message: types.Message) -> None:
     except (sqlite3.IntegrityError, sqlite3.OperationalError) as err:
         logger.error(err)
         await message.answer(f"С возвращением {message.from_user.first_name}\n"
-                             f"Хочеш запонить еще одну анкету❓\n"
+                             f"Ты уже заполнил анкету анкету❓\n"
                              f"\n"
                              f"<i>Продолжая, вы принимаете\n"
-                             f"<a href='https://ya.ru'>Пользовательское соглашение</a> "
-                             f"и <a href='https://ya.ru'>Политику конфиденциальности</a>.</i>",
+                             f"<a href='...'>Пользовательское соглашение</a> "
+                             f"и <a href='...'>Политику конфиденциальности</a>.</i>",
                              reply_markup=main_markup
                              )
+
+
+@router_commands.message(F.text == '/help')
+async def help_command(message: types.Message) -> None:
+    await message.answer(f"- /start - Начать заполнение анкеты;\n")

@@ -6,3 +6,4 @@ asgiref
 numpy
 matplotlib
 opencv-python
+urllib3
