@@ -23,3 +23,20 @@ class MensQuestionnaires(DatabaseConnect):
         sql = "INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age, about_me, finding, status, moderation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         parameters = (user_id, photo, user_name, gender, age, about_me, finding, status, moderation)
         self.execute(sql, parameters, commit=True)
+
+    @staticmethod
+    def format_args(sql, parameters: dict):
+        sql += " AND ".join([
+            f" {item} = ?" for item in parameters
+        ])
+        return sql, tuple(parameters.values())
+
+    def select_profile(self, **kwargs):
+        sql = "SELECT * FROM Users WHERE"
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, fetchone=True)
+
+    def delete_profile(self, **kwargs) -> None:
+        sql = "DELETE FROM Mensquestionnaires WHERE"
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, commit=True)

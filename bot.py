@@ -4,6 +4,8 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.exceptions import TelegramNetworkError, TelegramRetryAfter
+from aiogram.fsm.storage.redis import RedisStorage
+
 from dotenv import load_dotenv
 
 from data.sqlite_db_users import DatabaseUsers
@@ -33,8 +35,9 @@ def create_tables():
 
 
 async def connect_telegram():
+    storage = RedisStorage.from_url("redis://localhost:6379/0")
     bot = Bot(token=telegram_token, parse_mode="HTML")
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
     dp.include_routers(router_commands,
                        men_questionnaires_router,
                        woman_questionnaires_router,
@@ -45,8 +48,8 @@ async def connect_telegram():
         await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
         await register_commands(bot)
-    except TelegramNetworkError as error:
-        logger.error(error)
+    except TelegramNetworkError as te:
+        logger.error(te)
     finally:
         await bot.close()
 

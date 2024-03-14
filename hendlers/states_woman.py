@@ -44,7 +44,7 @@ async def incorrect_photo(message: types.Message, state: FSMContext) -> None:
 
 @woman_questionnaires_router.message(StatesQuestionnaire.NAME)
 async def add_age(message: types.Message, state: FSMContext) -> None:
-    await state.update_data(name=message.text, sex='Девушка')
+    await state.update_data(name=message.text, sex='Женский')
     await state.set_state(StatesQuestionnaire.AGE)
     await message.answer("Введите ваш возраст: ")
 
@@ -71,7 +71,7 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
 
 @woman_questionnaires_router.message(StatesQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
-    await state.update_data(gender=message.text)
+    await state.update_data(find_gender=message.text)
     await state.set_state(StatesQuestionnaire.STATUS)
     menu = await replay_keyboard(['Хочу', 'Не хочу'])
     await message.answer("Вы хотите чтобы ваша анкета показывалась другим пользователям?", reply_markup=menu)
@@ -98,7 +98,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
             age=data.get('age'),
             about_me=data.get('about_me'),
             status=data.get('status'),
-            finding=data.get('gender')
+            finding=data.get('find_gender')
         )
         logging.info("Added profile woman")
     except sqlite3.IntegrityError:

@@ -5,6 +5,7 @@
 ![Static Badge](https://img.shields.io/badge/python--dotenv-1.0-blue)
 ![Static Badge](https://img.shields.io/badge/urllib3-2.2-blue)
 ![Static Badge](https://img.shields.io/badge/SQLite-3.45.2-blue)
+![Static Badge](https://img.shields.io/badge/Redis-5.0.3-blue)
 
 
 ## Описание проекта ##
@@ -24,6 +25,7 @@
 * python-dotenv==1.0.0,
 * urllib3==2.2.1
 * sqlite == 3.45.2
+* redis==5.0.3
 
 ## Структура проекта ##
 

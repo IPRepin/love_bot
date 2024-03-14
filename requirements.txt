@@ -2,8 +2,9 @@ aiogram==3.3.0
 pytest==8.0.0
 pytest-asyncio==0.23.3
 python-dotenv==1.0.0
-asgiref
-numpy
-matplotlib
-opencv-python
-urllib3
+redis==5.0.3
+asgiref==3.7.2
+numpy==1.26.4
+matplotlib==3.8.3
+opencv-python==4.9.0.80
+urllib3==2.2.1

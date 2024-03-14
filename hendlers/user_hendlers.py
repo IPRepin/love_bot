@@ -14,8 +14,8 @@ async def man_users_gender(query: types.CallbackQuery):
                                f"Хочеш запонить еще одну анкету❓\n"
                                f"\n"
                                f"<i>Продолжая, вы принимаете\n"
-                               f"<a href='https://ya.ru'>Пользовательское соглашение</a> "
-                               f"и <a href='https://ya.ru'>Политику конфиденциальности</a>.</i>",
+                               f"<a href='...'>Пользовательское соглашение</a> "
+                               f"и <a href='...'>Политику конфиденциальности</a>.</i>",
                                reply_markup=main_markup
                                )
 
