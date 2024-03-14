@@ -20,7 +20,9 @@ class MensQuestionnaires(DatabaseConnect):
         self.execute(sql, commit=True)
 
     def add_profile(self, user_id, photo, user_name, gender, age, about_me, finding, status, moderation=None):
-        sql = "INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age, about_me, finding, status, moderation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        sql = ("INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age,"
+               " about_me, finding, status, moderation)"
+               " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
         parameters = (user_id, photo, user_name, gender, age, about_me, finding, status, moderation)
         self.execute(sql, parameters, commit=True)
 
@@ -30,6 +32,11 @@ class MensQuestionnaires(DatabaseConnect):
             f" {item} = ?" for item in parameters
         ])
         return sql, tuple(parameters.values())
+
+    def profile_exists(self, user_id):
+        sql = "SELECT * FROM Mensquestionnaires WHERE user_id = ?"
+        parameters = tuple([user_id])
+        return bool(self.execute(sql, parameters, fetchone=True))
 
     def select_profile(self, **kwargs):
         sql = "SELECT * FROM Users WHERE"

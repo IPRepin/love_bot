@@ -2,9 +2,11 @@
 
 from aiogram import types, Router, F
 
+from data.sqlite_men_questionnaire import MensQuestionnaires
 from keyboards.inline import buy_subscription_markup
 from keyboards.replay import main_markup
 
+men_db = MensQuestionnaires()
 main_users_router = Router()
 
 
@@ -23,3 +25,21 @@ async def man_users_gender(query: types.CallbackQuery):
 @main_users_router.message(F.text == '💞Хочу подписку')
 async def buy_subscription(message: types.Message) -> None:
     await message.answer(f"(Условия подписки)\n", reply_markup=buy_subscription_markup)
+
+
+@main_users_router.message(F.text == "🗑️Удалить анкету.")
+async def delete_men_profile(message: types.Message) -> None:
+    men_db.delete_profile(user_id=message.from_user.id)
+    await message.answer(f"{message.from_user.first_name}\n"
+                         f"Ваша анкета была удалена.\n"
+                         f"Хотите заполнить новую?",
+                         reply_markup=main_markup)
+
+
+@main_users_router.message(F.text == "🗑️Удалить анкету")
+async def delete_women_profile(message: types.Message) -> None:
+    men_db.delete_profile(user_id=message.from_user.id)
+    await message.answer(f"{message.from_user.first_name}\n"
+                         f"Ваша анкета была удалена.\n"
+                         f"Хотите заполнить новую?",
+                         reply_markup=main_markup)

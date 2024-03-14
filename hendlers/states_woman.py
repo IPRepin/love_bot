@@ -10,7 +10,7 @@ from aiogram.fsm.context import FSMContext
 
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from keyboards.inline import channel_markup
-from keyboards.replay import replay_keyboard, rmk
+from keyboards.replay import replay_keyboard, rmk, edit_woman_profile_markup
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesQuestionnaire
 
@@ -18,7 +18,10 @@ woman_questionnaires_router = Router()
 db = WomanQuestionnaires()
 
 
-@woman_questionnaires_router.message(F.text == '🙋‍♀️Заполнить женскую анкету')
+@woman_questionnaires_router.message(F.text.in_([
+    '🙋‍♀️Заполнить женскую анкету',
+    '✏️Отредактировать анкету',
+]))
 async def add_photo(message: types.Message, state: FSMContext) -> None:
     await state.set_state(StatesQuestionnaire.PHOTO)
     await message.answer(
@@ -58,7 +61,7 @@ async def add_about(message: types.Message, state: FSMContext) -> None:
     elif message.text.isdigit() and int(message.text) < 18:
         await message.answer("Вам должно быть 18 лет!")
     else:
-        await message.answer("Введите возраст числом!")
+        await message.answer("Введите возраст целым числом!")
 
 
 @woman_questionnaires_router.message(StatesQuestionnaire.ABOUT_ME)
@@ -84,7 +87,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.clear()
     photo = data.get('photo')
     text = administrator_text(data)
-    await message.answer_photo(photo, text,)
+    await message.answer_photo(photo, text, )
     await message.answer('****', reply_markup=rmk)
     await message.answer(f"{data.get('name')}\n"
                          f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
@@ -100,9 +103,21 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
             status=data.get('status'),
             finding=data.get('find_gender')
         )
-        logging.info("Added profile woman")
+        await message.answer_photo(photo, text, reply_markup=rmk)
+        await message.answer(f"{data.get('name')}\n"
+                             f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
+                             reply_markup=edit_woman_profile_markup
+                             )
+        logging.info("Added profile man")
     except sqlite3.IntegrityError:
         logging.info("Пользователь уже зарегистрирован")
+        # await message.answer(f"{data.get('name')}\n"
+        #                      f"Вы уже заполняли анкету.",
+        #                      reply_markup=edit_woman_profile_markup)
+        await message.answer_photo(photo, text, reply_markup=rmk)
+        await message.answer(f"{data.get('name')}\n"
+                             f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
+                             reply_markup=channel_markup)
 
 
 @woman_questionnaires_router.message(StatesQuestionnaire.FIND)

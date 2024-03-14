@@ -30,8 +30,8 @@ def create_tables():
         db_man_questionnaires.create_table_men_questionnaires()
         db_woman_questionnaires.create_table_women_questionnaires()
         logger.info("Tables created")
-    except Exception as e:
-        logger.error(e)
+    except Exception as err:
+        logger.error(err)
 
 
 async def connect_telegram():
@@ -48,8 +48,8 @@ async def connect_telegram():
         await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
         await register_commands(bot)
-    except TelegramNetworkError as te:
-        logger.error(te)
+    except TelegramNetworkError as telegram_err:
+        logger.error(telegram_err)
     finally:
         await bot.close()
 
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     try:
         asyncio.run(connect_telegram())
-    except TelegramRetryAfter as error:
-        logger.error(error)
+    except TelegramRetryAfter as retry_error:
+        logger.error(retry_error)
     except KeyboardInterrupt:
         logger.info('Bot interrupted')

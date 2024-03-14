@@ -10,7 +10,7 @@ from aiogram.fsm.context import FSMContext
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from keyboards.inline import channel_markup
-from keyboards.replay import replay_keyboard, rmk, edit_profile_markup
+from keyboards.replay import replay_keyboard, rmk, edit_man_profile_markup
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesQuestionnaire
 
@@ -18,7 +18,10 @@ men_questionnaires_router = Router()
 db = MensQuestionnaires()
 
 
-@men_questionnaires_router.message(F.text.in_(['🙋‍♂️Заполнить мужскую анкету', '✏️Отредактировать анкету.']))
+@men_questionnaires_router.message(F.text.in_([
+    '🙋‍♂️Заполнить мужскую анкету',
+    '✏️Отредактировать анкету.'
+]))
 async def add_photo(message: types.Message, state: FSMContext) -> None:
     await state.set_state(StatesQuestionnaire.PHOTO)
     await message.answer(
@@ -96,18 +99,16 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
             finding=data.get('find_gender')
         )
         await message.answer_photo(photo, text, reply_markup=rmk)
-        # await message.answer('*****', reply_markup=rmk)
         await message.answer(f"{data.get('name')}\n"
                              f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
-                             reply_markup=channel_markup)
+                             reply_markup=edit_man_profile_markup)
         logging.info("Added profile man")
     except sqlite3.IntegrityError:
         logging.info("Пользователь уже зарегистрирован")
         # await message.answer(f"{data.get('name')}\n"
         #                      f"Вы уже заполняли анкету.",
-        #                      reply_markup=edit_profile_markup)
+        #                      reply_markup=edit_man_profile_markup)
         await message.answer_photo(photo, text, reply_markup=rmk)
-        # await message.answer('*****', reply_markup=rmk)
         await message.answer(f"{data.get('name')}\n"
                              f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
                              reply_markup=channel_markup)

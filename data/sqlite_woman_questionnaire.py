@@ -33,6 +33,11 @@ class WomanQuestionnaires(DatabaseConnect):
         ])
         return sql, tuple(parameters.values())
 
+    def profile_exists(self, user_id):
+        sql = "SELECT * FROM Mensquestionnaires WHERE user_id = ?"
+        parameters = tuple([user_id])
+        return bool(self.execute(sql, parameters, fetchone=True))
+
     def select_profile(self, **kwargs):
         sql = "SELECT * FROM Users WHERE"
         sql, parameters = self.format_args(sql, kwargs)
