@@ -59,4 +59,4 @@
 ## Пример работы Телеграм бота ##
 Работающего телеграм бота можно посмотреть [тут](https://t.me/devman_sup_bot)
 
-![rec_bot](https://github.com/IPRepin/love_bot/assets/76727704/15972d4d-428d-46fc-a4a0-4579e91b38cf)
+![rec_work_bot](https://github.com/IPRepin/love_bot/assets/76727704/16f4e365-59b5-4611-a0d3-2864923bd723)
