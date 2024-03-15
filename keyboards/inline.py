@@ -20,3 +20,11 @@ buy_subscription_markup = InlineKeyboardMarkup(
 
     ]
 )
+
+confirmation_of_deletion = InlineKeyboardMarkup(
+    inline_keyboard=
+    [
+        [InlineKeyboardButton(text="Да удалить", callback_data="delete")],
+        [InlineKeyboardButton(text="Не удалять", callback_data="cancel")],
+    ]
+)

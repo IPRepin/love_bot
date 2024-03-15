@@ -20,4 +20,3 @@ class TelegramBotHandler(Handler):
                      'text': self.format(record)}
         http = urllib3.PoolManager()
         http.request(method='POST', url=url, fields=post_data)
-

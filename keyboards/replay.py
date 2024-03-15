@@ -13,35 +13,17 @@ main_markup = ReplyKeyboardMarkup(keyboard=[
     ],
 ], resize_keyboard=True, input_field_placeholder="Начни с заполнения анкеты⬇️", one_time_keyboard=True)
 
-edit_man_profile_markup = ReplyKeyboardMarkup(keyboard=[
+edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
-        KeyboardButton(text='✏️Отредактировать анкету.'),
+        KeyboardButton(text='✏️Отредактировать анкету'),
     ],
     [
-        KeyboardButton(text='🗑️Удалить анкету.'),
-    ],
-], resize_keyboard=True, input_field_placeholder="Отредактировать или удалить анкету⬇️", one_time_keyboard=True)
-
-
-edit_woman_profile_markup = ReplyKeyboardMarkup(keyboard=[
-    [
-        KeyboardButton(text='✏️Отредактировать анкету.'),
-    ],
-    [
-        KeyboardButton(text='🗑️Удалить анкету.'),
+        KeyboardButton(text='🗑️Удалить анкету'),
     ],
 ], resize_keyboard=True, input_field_placeholder="Отредактировать или удалить анкету⬇️", one_time_keyboard=True)
 
 
-async def replay_keyboard(text: str | list):
-    builder = ReplyKeyboardBuilder()
-    if isinstance(text, str):
-        text = [text]
-    [builder.button(text=txt, callback_data=txt) for txt in text]
-    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
-
-
-async def status_keyboard(text: str | list):
+async def gen_replay_keyboard(text: str | list):
     builder = ReplyKeyboardBuilder()
     if isinstance(text, str):
         text = [text]
