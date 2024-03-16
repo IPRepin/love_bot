@@ -82,7 +82,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesWomanQuestionnaire.STATUS)
     menu = await gen_replay_keyboard(['Хочу', 'Не хочу'])
-    await message.answer("Вы хотите чтобы ваша анкета показывалась другим пользователям?", reply_markup=menu)
+    await message.answer("Вы хотите чтобы ваш контакт телеграм был виден другим пользователям?", reply_markup=menu)
 
 
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS,
