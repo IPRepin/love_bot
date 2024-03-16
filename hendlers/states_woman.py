@@ -11,6 +11,7 @@ from aiogram.fsm.context import FSMContext
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from filters.photo_filter import has_face
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
+from utils.admins import get_random_admin
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesWomanQuestionnaire
 
@@ -105,7 +106,8 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             status=data.get('status'),
             finding=data.get('find_gender')
         )
-        await bot.send_photo(chat_id=309052693, photo=photo, caption=text)
+        admin_id = get_random_admin()
+        await bot.send_photo(chat_id=admin_id, photo=photo, caption=text)
         await message.answer(f"{data.get('name')}\n"
                              f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
                              reply_markup=edit_profile_markup

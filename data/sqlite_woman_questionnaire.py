@@ -14,8 +14,8 @@ class WomanQuestionnaires(DatabaseConnect):
           age INTEGER NOT NULL,
           about_me TEXT NOT NULL,
           finding VARCHAR(50) NOT NULL,
-          status BOOLEAN NOT NULL,
-          moderation VARCHAR(25),
+          status VARCHAR(10) NOT NULL,
+          moderation BOOLEAN,
           PRIMARY KEY (user_id)
         );"""
         self.execute(sql, commit=True)

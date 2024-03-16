@@ -58,7 +58,7 @@ if __name__ == '__main__':
     load_dotenv()
     telegram_log_handler = TelegramBotHandler()
     logging.basicConfig(
-        handlers=[telegram_log_handler],
+        handlers=logger.addHandler(telegram_log_handler),
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     telegram_token = os.getenv('TELEGRAM_TOKEN')

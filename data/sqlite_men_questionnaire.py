@@ -15,7 +15,7 @@ class MensQuestionnaires(DatabaseConnect):
           about_me VARCHAR(255) NOT NULL,
           finding VARCHAR(50) NOT NULL,
           status VARCHAR(10) NOT NULL,
-          moderation VARCHAR(25),
+          moderation BOOLEAN,
           PRIMARY KEY (user_id)
         );"""
         self.execute(sql, commit=True)

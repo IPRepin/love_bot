@@ -1,7 +1,7 @@
 '''
 Модуль отправки логов в Telegram
 '''
-
+import logging
 import os
 from logging import LogRecord, Handler
 
@@ -20,3 +20,13 @@ class TelegramBotHandler(Handler):
                      'text': self.format(record)}
         http = urllib3.PoolManager()
         http.request(method='POST', url=url, fields=post_data)
+
+
+# def setup_logger(logger):
+#     logger = logger
+#     telegram_log_handler = TelegramBotHandler()
+#     logging.basicConfig(
+#         handlers=logger.addHandler(telegram_log_handler),
+#         level=logging.INFO,
+#         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+#     return logger
