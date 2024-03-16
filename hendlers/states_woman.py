@@ -5,12 +5,11 @@
 import logging
 import sqlite3
 
-from aiogram import types, Router, F
+from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
-from keyboards.inline import channel_markup
-from keyboards.replay import gen_replay_keyboard, rmk, edit_profile_markup
+from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesWomanQuestionnaire
 
@@ -53,7 +52,7 @@ async def add_age(message: types.Message, state: FSMContext) -> None:
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.AGE)
 async def add_about(message: types.Message, state: FSMContext) -> None:
     if message.text.isdigit() and int(message.text) >= 18:
-        await state.update_data(age=int(message.text))
+        await state.update_data(age=int(message.text), user_url=message.from_user.url)
         await state.set_state(StatesWomanQuestionnaire.ABOUT_ME)
         await message.answer("Раскажите немного о себе: ")
     elif message.text.isdigit() and int(message.text) < 18:
@@ -80,7 +79,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
 
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS,
                                      F.text.casefold().in_(['хочу', 'не хочу']))
-async def check_status(message: types.Message, state: FSMContext) -> None:
+async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
     await state.update_data(status=message.text)
     data = await state.get_data()
     await state.clear()
@@ -91,13 +90,14 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
             user_id=message.from_user.id,
             photo=photo,
             user_name=data.get('name'),
+            user_url=data.get('user_url'),
             gender=data.get('sex'),
             age=data.get('age'),
             about_me=data.get('about_me'),
             status=data.get('status'),
             finding=data.get('find_gender')
         )
-        await message.answer_photo(photo, text, reply_markup=rmk)
+        await bot.send_photo(chat_id=309052693, photo=photo, caption=text)
         await message.answer(f"{data.get('name')}\n"
                              f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
                              reply_markup=edit_profile_markup
@@ -108,10 +108,6 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
         await message.answer(f"{data.get('name')}\n"
                              f"Вы уже заполняли анкету.",
                              reply_markup=edit_profile_markup)
-        # await message.answer_photo(photo, text, reply_markup=rmk)
-        # await message.answer(f"{data.get('name')}\n"
-        #                      f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
-        #                      reply_markup=channel_markup)
 
 
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND)

@@ -9,6 +9,7 @@ class MensQuestionnaires(DatabaseConnect):
           user_id INTEGER NOT NULL,
           photo VARCHAR(255) NOT NULL,
           user_name VARCHAR(100) NOT NULL,
+          user_url VARCHAR(255) NOT NULL,
           gender VARCHAR(50) NOT NULL,
           age INTEGER NOT NULL,
           about_me VARCHAR(255) NOT NULL,
@@ -19,11 +20,11 @@ class MensQuestionnaires(DatabaseConnect):
         );"""
         self.execute(sql, commit=True)
 
-    def add_profile(self, user_id, photo, user_name, gender, age, about_me, finding, status, moderation=None):
-        sql = ("INSERT INTO Mensquestionnaires (user_id, photo, user_name, gender, age,"
+    def add_profile(self, user_id, photo, user_name, user_url, gender, age, about_me, finding, status, moderation=None):
+        sql = ("INSERT INTO Mensquestionnaires (user_id, photo, user_name, user_url, gender, age,"
                " about_me, finding, status, moderation)"
-               " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-        parameters = (user_id, photo, user_name, gender, age, about_me, finding, status, moderation)
+               " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        parameters = (user_id, photo, user_name, user_url, gender, age, about_me, finding, status, moderation)
         self.execute(sql, parameters, commit=True)
 
     @staticmethod
