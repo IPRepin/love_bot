@@ -1,6 +1,6 @@
-import numpy as np
 import cv2
-from cv2.gapi.wip.draw import Image
+import numpy as np
+from PIL import Image
 
 
 def has_face(photo_file):
