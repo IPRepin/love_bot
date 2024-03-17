@@ -2,7 +2,6 @@
 Модуль машины состояний получения анкеты пользователя.
 """
 
-import logging
 import sqlite3
 
 from aiogram import types, Router, F, Bot
@@ -15,13 +14,16 @@ from utils.admins import get_random_admin
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesWomanQuestionnaire
 
+from utils.logs_hendler_telegram import setup_logger
+
+logger = setup_logger()
 woman_questionnaires_router = Router()
 db = WomanQuestionnaires()
 
 
 @woman_questionnaires_router.message(F.text == '🙋‍♀️Заполнить женскую анкету')
 async def add_photo(message: types.Message, state: FSMContext) -> None:
-    logging.info('Заполнение анкеты девушка')
+    setup_logger().info('Заполнение анкеты девушка')
     await state.set_state(StatesWomanQuestionnaire.PHOTO)
     await message.answer(
         f"{message.from_user.first_name}\n"
@@ -107,14 +109,19 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             finding=data.get('find_gender')
         )
         admin_id = get_random_admin()
-        await bot.send_photo(chat_id=admin_id, photo=photo, caption=text)
-        await message.answer(f"{data.get('name')}\n"
-                             f"Спасибо! Ваша анкета отправлена на модерацию. Мы сообщим о успешном прохождении!",
-                             reply_markup=edit_profile_markup
-                             )
-        logging.info("Added profile man")
-    except sqlite3.IntegrityError:
-        logging.info("Пользователь уже зарегистрирован")
+        await bot.send_photo(chat_id=309052693, photo=photo, caption=text)
+        await message.answer(text=f"{data.get('name')}\n"
+                                  f"Спасибо! Ваша анкета отправлена на модерацию. \n"
+                                  f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
+                                  f"ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ 'ДЛЯ КАНАЛА ЗНАКОМСТВ'\n"
+                                  f" на <a href='...'>ОТПРАВЛЯТЬ СЮДА</a>.</i>"
+                                  f"Мы сообщим об успешном прохождении модерации.",
+                             reply_markup=edit_profile_markup,
+                             disable_web_page_preview=True, )
+        logger.info("Added profile man")
+    except sqlite3.IntegrityError as error:
+        logger.error(error)
+        logger.error("Пользователь уже зарегистрирован")
         await message.answer(f"{data.get('name')}\n"
                              f"Вы уже заполняли анкету.",
                              reply_markup=edit_profile_markup)

@@ -1,11 +1,9 @@
 import asyncio
-import logging
 import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.exceptions import TelegramNetworkError, TelegramRetryAfter
 from aiogram.fsm.storage.redis import RedisStorage
-
 from dotenv import load_dotenv
 
 from data.sqlite_db_users import DatabaseUsers
@@ -16,15 +14,10 @@ from hendlers.states_man import men_questionnaires_router
 from hendlers.states_woman import woman_questionnaires_router
 from hendlers.user_hendlers import main_users_router
 from utils.commands import register_commands
-from utils.logs_hendler_telegram import TelegramBotHandler
-
-logger = logging.getLogger(__name__)
+from utils.logs_hendler_telegram import TelegramBotHandler, setup_logger
 
 
 def create_tables():
-    db_users = DatabaseUsers()
-    db_man_questionnaires = MensQuestionnaires()
-    db_woman_questionnaires = WomanQuestionnaires()
     try:
         db_users.create_table_users()
         db_man_questionnaires.create_table_men_questionnaires()
@@ -56,14 +49,14 @@ async def connect_telegram():
 
 if __name__ == '__main__':
     load_dotenv()
-    telegram_log_handler = TelegramBotHandler()
-    logging.basicConfig(
-        handlers=logger.addHandler(telegram_log_handler),
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    db_users = DatabaseUsers()
+    db_man_questionnaires = MensQuestionnaires()
+    db_woman_questionnaires = WomanQuestionnaires()
+    logger = setup_logger()
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     try:
         asyncio.run(connect_telegram())
+        logger.info("Bot started")
     except TelegramRetryAfter as retry_error:
         logger.error(retry_error)
     except KeyboardInterrupt:
