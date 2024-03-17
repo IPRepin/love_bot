@@ -1,7 +1,7 @@
 """
 Модуль машины состояний получения анкеты пользователя.
 """
-
+import logging
 import sqlite3
 
 from aiogram import types, Router, F, Bot
@@ -14,9 +14,8 @@ from utils.admins import get_random_admin
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesWomanQuestionnaire
 
-from utils.logs_hendler_telegram import setup_logger
 
-logger = setup_logger()
+logger = logging.getLogger(__name__)
 woman_questionnaires_router = Router()
 db = WomanQuestionnaires()
 
@@ -111,10 +110,10 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=309052693, photo=photo, caption=text)
         await message.answer(text=f"{data.get('name')}\n"
-                                  f"Спасибо! Ваша анкета отправлена на модерацию. \n"
+                                  f"Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
-                                  f"ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ 'ДЛЯ КАНАЛА ЗНАКОМСТВ'\n"
-                                  f" на <a href='...'>ОТПРАВЛЯТЬ СЮДА</a>.</i>"
+                                  f'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
+                                  f"на ...\n"
                                   f"Мы сообщим об успешном прохождении модерации.",
                              reply_markup=edit_profile_markup,
                              disable_web_page_preview=True, )

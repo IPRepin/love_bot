@@ -1,3 +1,4 @@
+import logging
 import os
 import sqlite3
 
@@ -9,10 +10,9 @@ from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from keyboards.replay import main_markup, edit_profile_markup
-from utils.logs_hendler_telegram import setup_logger
 
 load_dotenv()
-logger = setup_logger()
+logger = logging.getLogger(__name__)
 router_commands = Router()
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()

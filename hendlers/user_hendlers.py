@@ -1,5 +1,5 @@
 """Функции обработки кнопок основного меню"""
-
+import logging
 
 from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
@@ -11,9 +11,7 @@ from hendlers.states_woman import add_photo as women_add_photo
 from keyboards.inline import buy_subscription_markup, go_to_free_chat
 from keyboards.replay import main_markup, edit_profile_markup
 
-from utils.logs_hendler_telegram import setup_logger
-
-logger = setup_logger()
+logger = logging.getLogger(__name__)
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()
 main_users_router = Router()
