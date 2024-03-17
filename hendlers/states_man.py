@@ -33,16 +33,16 @@ async def add_photo(message: types.Message, state: FSMContext) -> None:
 
 @men_questionnaires_router.message(StatesMenQuestionnaire.PHOTO, F.photo)
 async def add_name(message: types.Message, state: FSMContext, bot: Bot) -> None:
-    file_id = message.photo[-1].file_id
-    file = await bot.get_file(file_id)
-    file_path = file.file_path
-    file_bytes = await bot.download_file(file_path)
-    if has_face(file_bytes):
-        await state.update_data(photo=message.photo[-1].file_id)
-        await state.set_state(StatesMenQuestionnaire.NAME)
-        await message.answer("Введите ваше имя:")
-    else:
-        await message.answer("Нет лица на фотографии!")
+    # file_id = message.photo[-1].file_id
+    # file = await bot.get_file(file_id)
+    # file_path = file.file_path
+    # file_bytes = await bot.download_file(file_path)
+    # if has_face(file_bytes):
+    await state.update_data(photo=message.photo[-1].file_id)
+    await state.set_state(StatesMenQuestionnaire.NAME)
+    await message.answer("Введите ваше имя:")
+    # else:
+    #     await message.answer("Нет лица на фотографии!")
 
 
 @men_questionnaires_router.message(StatesMenQuestionnaire.PHOTO, ~F.photo)
