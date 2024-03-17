@@ -22,7 +22,7 @@ db = WomanQuestionnaires()
 
 @woman_questionnaires_router.message(F.text == '🙋‍♀️Заполнить женскую анкету')
 async def add_photo(message: types.Message, state: FSMContext) -> None:
-    setup_logger().info('Заполнение анкеты девушка')
+    logger.info('Заполнение анкеты девушка')
     await state.set_state(StatesWomanQuestionnaire.PHOTO)
     await message.answer(
         f"{message.from_user.first_name}\n"
