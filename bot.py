@@ -62,9 +62,9 @@ if __name__ == '__main__':
     db_woman_questionnaires = WomanQuestionnaires()
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     try:
-        logger.info("Bot started")
+        logger.error("Bot started")
         asyncio.run(connect_telegram())
     except TelegramRetryAfter as retry_error:
         logger.error(retry_error)
     except KeyboardInterrupt:
-        logger.info('Bot interrupted')
+        logger.error('Bot interrupted')
