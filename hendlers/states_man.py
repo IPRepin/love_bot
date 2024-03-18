@@ -8,9 +8,8 @@ from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
-from filters.photo_filter import has_face
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
-from utils.admins import get_random_admin
+from filters.admins_filter import get_random_admin
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesMenQuestionnaire
 
