@@ -25,3 +25,7 @@ class StatesWomanQuestionnaire(StatesGroup):
     ABOUT_ME = State()
     FIND = State()
     STATUS = State()
+
+
+class UserIdState(StatesGroup):
+    USER_ID = State()

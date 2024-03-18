@@ -56,7 +56,7 @@ if __name__ == '__main__':
     telegram_log_handler = TelegramBotHandler()
     logging.basicConfig(
         handlers=logger.addHandler(telegram_log_handler),
-        level=logging.ERROR,
+        level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     db_users = DatabaseUsers()
     db_man_questionnaires = MensQuestionnaires()

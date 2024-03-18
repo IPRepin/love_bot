@@ -49,7 +49,7 @@ go_to_free_chat = InlineKeyboardMarkup(
 
 moderation_keyboard = InlineKeyboardMarkup(
     inline_keyboard=[
-        [InlineKeyboardButton(text="Одобрено", callback_data="approved")],
-        [InlineKeyboardButton(text="Отклонено", callback_data="rejected")],
+        [InlineKeyboardButton(text="✅Одобрено", callback_data="approved")],
+        [InlineKeyboardButton(text="🚫Отклонено", callback_data="rejected")],
     ]
 )

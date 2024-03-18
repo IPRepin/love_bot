@@ -13,8 +13,7 @@ from keyboards.inline import moderation_keyboard
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from filters.admins_filter import get_random_admin
 from utils.auxiliary_module import administrator_text
-from utils.states import StatesMenQuestionnaire
-
+from utils.states import StatesMenQuestionnaire, UserIdState
 
 logger = logging.getLogger(__name__)
 men_questionnaires_router = Router()
@@ -108,6 +107,8 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             status=data.get('status'),
             finding=data.get('find_gender')
         )
+        await state.set_state(UserIdState.USER_ID)
+        await state.update_data(user_id=message.from_user.id)
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
