@@ -8,6 +8,8 @@ from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
+from filters.photo_filter import has_face
+from keyboards.inline import moderation_keyboard
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from filters.admins_filter import get_random_admin
 from utils.auxiliary_module import administrator_text
@@ -32,16 +34,16 @@ async def add_photo(message: types.Message, state: FSMContext) -> None:
 
 @men_questionnaires_router.message(StatesMenQuestionnaire.PHOTO, F.photo)
 async def add_name(message: types.Message, state: FSMContext, bot: Bot) -> None:
-    # file_id = message.photo[-1].file_id
-    # file = await bot.get_file(file_id)
-    # file_path = file.file_path
-    # file_bytes = await bot.download_file(file_path)
-    # if has_face(file_bytes):
-    await state.update_data(photo=message.photo[-1].file_id)
-    await state.set_state(StatesMenQuestionnaire.NAME)
-    await message.answer("Введите ваше имя:")
-    # else:
-    #     await message.answer("Нет лица на фотографии!")
+    file_id = message.photo[-1].file_id
+    file = await bot.get_file(file_id)
+    file_path = file.file_path
+    file_bytes = await bot.download_file(file_path)
+    if has_face(file_bytes):
+        await state.update_data(photo=message.photo[-1].file_id)
+        await state.set_state(StatesMenQuestionnaire.NAME)
+        await message.answer("Введите ваше имя:")
+    else:
+        await message.answer("Нет лица на фотографии!")
 
 
 @men_questionnaires_router.message(StatesMenQuestionnaire.PHOTO, ~F.photo)
@@ -110,7 +112,7 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
                              caption=text,
-                             # reply_markup=moderation_keyboard
+                             reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
                                   f"Спасибо! Ваша анкета отправлена на модерацию.\n"
