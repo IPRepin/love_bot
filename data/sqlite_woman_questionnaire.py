@@ -48,3 +48,7 @@ class WomanQuestionnaires(DatabaseConnect):
         sql = "DELETE FROM Womansqensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, commit=True)
+
+    def update_moderation(self, moderation: bool, user_id: int) -> None:
+        sql = "UPDATE Womansqensquestionnaires SET moderation=? WHERE user_id=?"
+        return self.execute(sql, parameters=(moderation, user_id), commit=True)

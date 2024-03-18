@@ -63,7 +63,7 @@ async def add_age(message: types.Message, state: FSMContext) -> None:
 @men_questionnaires_router.message(StatesMenQuestionnaire.AGE)
 async def add_about(message: types.Message, state: FSMContext) -> None:
     if message.text.isdigit() and int(message.text) >= 18:
-        await state.update_data(age=int(message.text), user_url=message.from_user.url)
+        await state.update_data(age=int(message.text), user_url=f"@{message.from_user.username}")
         await state.set_state(StatesMenQuestionnaire.ABOUT_ME)
         await message.answer("Раскажите немного о себе: ")
     elif message.text.isdigit() and int(message.text) < 18:
