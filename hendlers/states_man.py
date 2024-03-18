@@ -108,7 +108,7 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             finding=data.get('find_gender')
         )
         admin_id = get_random_admin()
-        await bot.send_photo(chat_id=admin_id, photo=photo, caption=text)
+        await bot.send_photo(chat_id=admin_id, photo=photo, caption=text, reply_markup=moderation_keyboard)
         await message.answer(text=f"{data.get('name')}\n"
                                   f"Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
