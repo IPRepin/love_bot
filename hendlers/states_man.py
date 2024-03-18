@@ -8,9 +8,8 @@ from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
-from filters.photo_filter import has_face
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
-from utils.admins import get_random_admin
+from filters.admins_filter import get_random_admin
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesMenQuestionnaire
 
@@ -108,7 +107,7 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             finding=data.get('find_gender')
         )
         admin_id = get_random_admin()
-        await bot.send_photo(chat_id=309052693, photo=photo, caption=text)
+        await bot.send_photo(chat_id=309052693, photo=photo, caption=text, reply_markup=moderation_keyboard)
         await message.answer(text=f"{data.get('name')}\n"
                                   f"Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
