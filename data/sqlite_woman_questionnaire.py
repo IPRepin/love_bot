@@ -15,12 +15,13 @@ class WomanQuestionnaires(DatabaseConnect):
           about_me TEXT NOT NULL,
           finding VARCHAR(50) NOT NULL,
           status VARCHAR(10) NOT NULL,
-          moderation BOOLEAN,
+          moderation varchar(50),
           PRIMARY KEY (user_id)
         );"""
         self.execute(sql, commit=True)
 
-    def add_profile(self, user_id, photo, user_name, user_url, gender, age, about_me, finding, status, moderation=None):
+    def add_profile(self, user_id, photo, user_name, user_url, gender, age, about_me, finding, status,
+                    moderation="Не промодерировано"):
         sql = ("INSERT INTO Womansqensquestionnaires (user_id, photo, user_name, user_url, gender, age,"
                " about_me, finding, status, moderation)"
                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -39,6 +40,10 @@ class WomanQuestionnaires(DatabaseConnect):
         parameters = tuple([user_id])
         return bool(self.execute(sql, parameters, fetchone=True))
 
+    def select_all(self):
+        sql = "SELECT * FROM Womansqensquestionnaires"
+        return self.execute(sql, fetchall=True)
+
     def select_profile(self, **kwargs):
         sql = "SELECT * FROM Womansqensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
@@ -49,6 +54,6 @@ class WomanQuestionnaires(DatabaseConnect):
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, commit=True)
 
-    def update_moderation(self, moderation: bool, user_id: int) -> None:
+    def update_moderation(self, moderation: str, user_id: int) -> None:
         sql = "UPDATE Womansqensquestionnaires SET moderation=? WHERE user_id=?"
         return self.execute(sql, parameters=(moderation, user_id), commit=True)

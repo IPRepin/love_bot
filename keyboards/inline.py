@@ -53,3 +53,17 @@ moderation_keyboard = InlineKeyboardMarkup(
         [InlineKeyboardButton(text="🚫Отклонено", callback_data="rejected")],
     ]
 )
+
+download_button = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Скаать пользователей бота", callback_data="all_users")
+        ],
+        [
+            InlineKeyboardButton(text="Скачать мужские анкеты", callback_data="male_users"),
+        ],
+        [
+            InlineKeyboardButton(text="Скачать женские анкеты", callback_data="female_users"),
+        ]
+    ],
+)

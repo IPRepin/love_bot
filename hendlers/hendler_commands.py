@@ -40,7 +40,8 @@ async def get_start(message: types.Message) -> None:
         else:
             await message.answer(f"{message.from_user.first_name} вы являетесь администратором бота.\n"
                                  f"В этот чат вам будут приходить анкеты пользователей.",
-                                 reply_markup=admin_markup)
+                                 reply_markup=admin_markup
+                                 )
     except (sqlite3.IntegrityError, sqlite3.OperationalError) as err:
         logger.error(err)
         logger.error("Пользователь с таким id уже существует")
