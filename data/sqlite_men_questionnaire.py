@@ -40,7 +40,7 @@ class MensQuestionnaires(DatabaseConnect):
         return bool(self.execute(sql, parameters, fetchone=True))
 
     def select_profile(self, **kwargs):
-        sql = "SELECT * FROM Users WHERE"
+        sql = "SELECT * FROM Mensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchone=True)
 

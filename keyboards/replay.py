@@ -35,3 +35,14 @@ async def gen_replay_keyboard(text: str | list):
 
 
 rmk = ReplyKeyboardRemove()
+
+admin_markup = ReplyKeyboardMarkup(keyboard=[
+    [
+        KeyboardButton(text="⏩Следующая анкета"),
+    ],
+    [
+        KeyboardButton(text="💾Выгрузить данные пользователей")
+    ]
+],
+    resize_keyboard=True
+)

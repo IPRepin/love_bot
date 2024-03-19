@@ -42,3 +42,9 @@ async def moderation_questionnaires(query: types.CallbackQuery,
         await query.message.answer("🚫Анкета отклонена")
         await bot.send_message(chat_id=user_id, text="🚫Ваша анкета отклонена")
         await query.answer()
+
+
+@main_admin_router.callback_query(F.data.in_(['approved', 'rejected']))
+async def not_moderation_questionnaires(query: types.CallbackQuery):
+    await query.message.answer("Анкета уже проверена, либо пользователь удалил анкету!")
+    await query.answer()
