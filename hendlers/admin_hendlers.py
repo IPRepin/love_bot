@@ -3,15 +3,17 @@ import logging
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
+from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
-from keyboards.inline import moderation_keyboard
+from keyboards.inline import moderation_keyboard, download_button
 from utils.auxiliary_module import moderator_text
 from utils.states import UserIdState
 
 logger = logging.getLogger(__name__)
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()
+db_users = DatabaseUsers()
 main_admin_router = Router()
 
 
@@ -78,3 +80,10 @@ async def not_moderation_questionnaires(message: types.Message,
                              )
     else:
         await message.answer("😎Все анкеты проверены!")
+
+
+@main_admin_router.message(F.text == '💾Выгрузить данные пользователей')
+async def get_questionnaires(message: types.Message) -> None:
+    await message.answer("Можно выгрузить всех пользователей бота (не анкеты).\n"
+                         "Либо анкеты пользоветелей.",
+                         reply_markup=download_button)

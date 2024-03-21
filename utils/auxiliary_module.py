@@ -1,6 +1,8 @@
 '''
 Модуль содержит дополнительный функционал для работы с ботом
 '''
+import csv
+from datetime import datetime
 
 
 def administrator_text(data: dict) -> str:
@@ -24,3 +26,12 @@ def moderator_text(data: list) -> str:
             f"about_me: {data[6]}\n"
             f"status: {data[7]}\n"
             )
+
+
+def new_file(data, query):
+    name_file = datetime.now().strftime('%d-%m-%Y')
+    with open(F'data/{query}_{name_file}.csv', 'w', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
+
+

@@ -11,6 +11,7 @@ from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.admin_hendlers import main_admin_router
+from hendlers.download_hendlers import download_router
 from hendlers.hendler_commands import router_commands
 from hendlers.states_man import men_questionnaires_router
 from hendlers.states_woman import woman_questionnaires_router
@@ -38,6 +39,7 @@ async def connect_telegram():
                        woman_questionnaires_router,
                        main_users_router,
                        main_admin_router,
+                       download_router,
                        )
     create_tables()
     try:
