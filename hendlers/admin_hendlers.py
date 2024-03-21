@@ -1,16 +1,20 @@
 import logging
+import os
 
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
+from dotenv import load_dotenv
 
 from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
+from filters.admins_filter import AdminsFilter
 from keyboards.inline import moderation_keyboard, download_button
 from utils.auxiliary_module import moderator_text
 from utils.states import UserIdState
 
 logger = logging.getLogger(__name__)
+load_dotenv()
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()
 db_users = DatabaseUsers()
@@ -18,6 +22,7 @@ main_admin_router = Router()
 
 
 @main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
+                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]),
                                   UserIdState.USER_ID)
 async def moderation_questionnaires(query: types.CallbackQuery,
                                     bot: Bot,
@@ -52,13 +57,15 @@ async def moderation_questionnaires(query: types.CallbackQuery,
         await query.answer()
 
 
-@main_admin_router.callback_query(F.data.in_(['approved', 'rejected']))
+@main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
+                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]),)
 async def not_moderation_questionnaires(query: types.CallbackQuery):
     await query.message.answer("Анкета уже проверена, либо пользователь удалил анкету!")
     await query.answer()
 
 
-@main_admin_router.message(F.text == "⏩Следующая анкета")
+@main_admin_router.message(F.text == "⏩Следующая анкета",
+                           AdminsFilter([int(os.getenv("ADMINS_ID"))]),)
 async def not_moderation_questionnaires(message: types.Message,
                                         state: FSMContext,
                                         bot: Bot) -> None:
@@ -82,7 +89,9 @@ async def not_moderation_questionnaires(message: types.Message,
         await message.answer("😎Все анкеты проверены!")
 
 
-@main_admin_router.message(F.text == '💾Выгрузить данные пользователей')
+@main_admin_router.message(F.text == '💾Выгрузить данные пользователей',
+                           AdminsFilter([int(os.getenv("ADMINS_ID"))]),
+                           )
 async def get_questionnaires(message: types.Message) -> None:
     await message.answer("Можно выгрузить всех пользователей бота (не анкеты).\n"
                          "Либо анкеты пользоветелей.",
