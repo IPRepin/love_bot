@@ -40,7 +40,7 @@ async def download_all_button(query: types.CallbackQuery,
         logger.error(f"В базе данных нет данных\n"
                      f"{error}"
                      )
-        os.remove(F'data/male_{name_file}.csv')
+        os.remove(F'data/all_{name_file}.csv')
         await query.message.answer("В базе данных нет заполненных анкет")
 
 
@@ -89,5 +89,5 @@ async def download_female_button(query: types.CallbackQuery,
         logger.error(f"В базе данных нет данных\n"
                      f"{error}"
                      )
-        os.remove(F'data/male_{name_file}.csv')
+        os.remove(F'data/female_{name_file}.csv')
         await query.message.answer("В базе данных нет заполненных анкет")
