@@ -66,7 +66,7 @@ async def not_moderation_questionnaires(query: types.CallbackQuery):
 
 @main_admin_router.message(F.text == "⏩Следующая анкета",
                            AdminsFilter([int(os.getenv("ADMINS_ID"))]),)
-async def not_moderation_questionnaires(message: types.Message,
+async def next_moderation_questionnaires(message: types.Message,
                                         state: FSMContext,
                                         bot: Bot) -> None:
     if db_men.select_profile(moderation="Не промодерировано"):
