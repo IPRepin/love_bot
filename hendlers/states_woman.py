@@ -89,7 +89,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
 
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS,
                                      F.text.casefold().in_(['хочу', 'не хочу']))
-async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
+async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> None:
     await state.update_data(status=message.text)
     data = await state.get_data()
     await state.clear()
