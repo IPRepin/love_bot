@@ -28,6 +28,7 @@ async def cancel_btn(query: types.CallbackQuery):
                                    f"и <a href='...'>Политику конфиденциальности</a>.</i>",
                                    reply_markup=main_markup
                                    )
+        await query.answer()
     elif query.data == 'back':
         await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"
                                    f"Хочеш запонить еще одну анкету❓\n"
@@ -37,6 +38,7 @@ async def cancel_btn(query: types.CallbackQuery):
                                    f"и <a href='...'>Политику конфиденциальности</a>.</i>",
                                    reply_markup=edit_profile_markup
                                    )
+        await query.answer()
 
 
 @main_users_router.message(F.text == '💞Хочу подписку')
