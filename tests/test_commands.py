@@ -1,4 +1,5 @@
-from unittest.mock import AsyncMock
+import os
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -13,5 +14,6 @@ async def test_cmd_help():
     message.answer.assert_called_once_with(f"- /start - Начать заполнение анкеты;\n")
 
 
-# async def test_cmd_start():
-#     await get_start(message)
+@pytest.mark.asyncio
+async def test_get_start(message, db_connection, admins_ids):
+    pass

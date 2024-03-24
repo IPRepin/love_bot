@@ -20,12 +20,15 @@ class WomanQuestionnaires(DatabaseConnect):
         );"""
         self.execute(sql, commit=True)
 
-    def add_profile(self, user_id, photo, user_name, user_url, gender, age, about_me, finding, status,
+    def add_profile(self, user_id, photo, user_name, user_url,
+                    gender, age, about_me, finding, status,
                     moderation="Не промодерировано"):
-        sql = ("INSERT INTO Womansqensquestionnaires (user_id, photo, user_name, user_url, gender, age,"
+        sql = ("INSERT INTO Womansqensquestionnaires (user_id, photo, user_name,"
+               "user_url, gender, age,"
                " about_me, finding, status, moderation)"
                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-        parameters = (user_id, photo, user_name, user_url, gender, age, about_me, finding, status, moderation)
+        parameters = (user_id, photo, user_name, user_url, gender,
+                      age, about_me, finding, status, moderation)
         self.execute(sql, parameters, commit=True)
 
     @staticmethod

@@ -17,26 +17,16 @@ db_woman = WomanQuestionnaires()
 main_users_router = Router()
 
 
-@main_users_router.callback_query(F.data == 'cancel' or F.data == 'back')
+@main_users_router.callback_query(F.data == 'cancel')
 async def cancel_btn(query: types.CallbackQuery):
-    if query.data == 'cancel':
-        await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"
-                                   f"Хочеш запонить еще одну анкету❓\n"
-                                   f"\n"
-                                   f"<i>Продолжая, вы принимаете\n"
-                                   f"<a href='...'>Пользовательское соглашение</a> "
-                                   f"и <a href='...'>Политику конфиденциальности</a>.</i>",
-                                   reply_markup=main_markup
-                                   )
-    elif query.data == 'back':
-        await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"
-                                   f"Хочеш запонить еще одну анкету❓\n"
-                                   f"\n"
-                                   f"<i>Продолжая, вы принимаете\n"
-                                   f"<a href='...'>Пользовательское соглашение</a> "
-                                   f"и <a href='...'>Политику конфиденциальности</a>.</i>",
-                                   reply_markup=edit_profile_markup
-                                   )
+    await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"
+                               f"Хочеш запонить еще одну анкету❓\n"
+                               f"\n"
+                               f"<i>Продолжая, вы принимаете\n"
+                               f"<a href='...'>Пользовательское соглашение</a> "
+                               f"и <a href='...'>Политику конфиденциальности</a>.</i>",
+                               reply_markup=main_markup
+                               )
 
 
 @main_users_router.message(F.text == '💞Хочу подписку')

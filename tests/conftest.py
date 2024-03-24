@@ -1,12 +1,15 @@
 import asyncio
+import sqlite3
+from datetime import datetime
 
 import pytest
 import pytest_asyncio
-from aiogram import Dispatcher
+from aiogram import Dispatcher, types
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage
 
 from tests.mocked_bot import MockedBot
+from tests.utils_test import test_user, chat
 
 
 @pytest_asyncio.fixture()
@@ -60,3 +63,35 @@ async def dispatcher():
 @pytest_asyncio.fixture(scope="session")
 async def loop():
     return asyncio.get_event_loop()
+
+
+@pytest.fixture
+def message():
+    return types.Message(
+        from_user=test_user,
+        chat=chat,
+        message_id=1,
+        date=datetime.now(),
+    )
+
+
+@pytest.fixture
+def db_connection():
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Users (
+          user_name VARCHAR(255),
+          user_id INTEGER NOT NULL,
+          user_url VARCHAR(255),
+          PRIMARY KEY (user_id)
+        );''')
+    conn.commit()
+    yield conn
+    conn.close()
+
+
+@pytest.fixture
+def admins_ids():
+    return {
+        "ADMINS_ID": "1,2,3",
+    }
