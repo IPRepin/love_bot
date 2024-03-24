@@ -20,7 +20,7 @@ main_users_router = Router()
 @main_users_router.callback_query(F.data == 'cancel' or F.data == 'back')
 async def cancel_btn(query: types.CallbackQuery):
     if query.data == 'cancel':
-        await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"                                 
+        await query.message.answer(f"С возвращением\n"                                 
                                    f"\n"
                                    f"<i>Продолжая, вы принимаете\n"
                                    f"<a href='...'>Пользовательское соглашение</a> "
@@ -29,7 +29,7 @@ async def cancel_btn(query: types.CallbackQuery):
                                    )
         await query.answer()
     elif query.data == 'back':
-        await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"
+        await query.message.answer(f"С возвращением\n"
                                    f"\n"
                                    f"<i>Продолжая, вы принимаете\n"
                                    f"<a href='...'>Пользовательское соглашение</a> "
