@@ -44,31 +44,33 @@ async def moderation_questionnaires(query: types.CallbackQuery,
     elif query.data == 'rejected' and db_men.profile_exists(user_id=user_id):
         db_men.update_moderation(user_id=user_id, moderation='Отклонено')
         await query.message.answer("🚫Анкета отклонена")
-        await bot.send_message(chat_id=user_id, text="🚫Ваша анкета отклонена\n"
-                                                     "Вы можете отправить новую анкету нажав на кнопку ниже\n"
-                                                     "✏️Отредактировать анкету")
+        await bot.send_message(chat_id=user_id,
+                               text="🚫Ваша анкета отклонена\n"
+                                    "Вы можете отправить новую анкету нажав на кнопку ниже\n"
+                                    "✏️Отредактировать анкету")
         await query.answer()
     elif query.data == 'rejected' and db_woman.profile_exists(user_id=user_id):
         db_woman.update_moderation(user_id=user_id, moderation='Отклонено')
         await query.message.answer("🚫Анкета отклонена")
-        await bot.send_message(chat_id=user_id, text="🚫Ваша анкета отклонена\n"
-                                                     "Вы можете отправить новую анкету нажав на кнопку ниже\n"
-                                                     "✏️Отредактировать анкету")
+        await bot.send_message(chat_id=user_id,
+                               text="🚫Ваша анкета отклонена\n"
+                                    "Вы можете отправить новую анкету нажав на кнопку ниже\n"
+                                    "✏️Отредактировать анкету")
         await query.answer()
 
 
 @main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
-                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]),)
+                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]), )
 async def not_moderation_questionnaires(query: types.CallbackQuery):
     await query.message.answer("Анкета уже проверена, либо пользователь удалил анкету!")
     await query.answer()
 
 
 @main_admin_router.message(F.text == "⏩Следующая анкета",
-                           AdminsFilter([int(os.getenv("ADMINS_ID"))]),)
+                           AdminsFilter([int(os.getenv("ADMINS_ID"))]), )
 async def next_moderation_questionnaires(message: types.Message,
-                                        state: FSMContext,
-                                        bot: Bot) -> None:
+                                         state: FSMContext,
+                                         bot: Bot) -> None:
     if db_men.select_profile(moderation="Не промодерировано"):
         questionnaires = db_men.select_profile(moderation="Не промодерировано")
         await state.set_state(UserIdState.USER_ID)

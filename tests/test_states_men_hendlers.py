@@ -10,7 +10,7 @@ from hendlers.states_man import (
     add_age,
     add_about,
     add_find_me,
-    check_status, finish_state, incorrect_gender,
+    check_status, incorrect_gender,
 )
 from keyboards.replay import gen_replay_keyboard
 from tests.conftest import memory_storage as storage
@@ -156,6 +156,7 @@ async def test_men_state_finish_state(storage, bot):
     )
     await finish_state(message, state=state, bot=bot)
     '''
+
 
 @pytest.mark.asyncio
 async def test_men_state_incorrect_gender(storage, bot):

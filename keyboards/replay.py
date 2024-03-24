@@ -11,7 +11,9 @@ main_markup = ReplyKeyboardMarkup(keyboard=[
     [
         KeyboardButton(text='💞Хочу подписку'),
     ],
-], resize_keyboard=True, input_field_placeholder="Начни с заполнения анкеты⬇️", one_time_keyboard=True)
+], resize_keyboard=True,
+    input_field_placeholder="Начни с заполнения анкеты⬇️",
+    one_time_keyboard=True)
 
 edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
@@ -23,7 +25,9 @@ edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
         KeyboardButton(text='🗑️Удалить анкету'),
     ],
-], resize_keyboard=True, input_field_placeholder="Отредактировать или удалить анкету⬇️", one_time_keyboard=True)
+], resize_keyboard=True,
+    input_field_placeholder="Отредактировать или удалить анкету⬇️",
+    one_time_keyboard=True)
 
 
 async def gen_replay_keyboard(text: str | list):

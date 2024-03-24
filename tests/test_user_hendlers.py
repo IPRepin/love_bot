@@ -29,7 +29,7 @@ async def test_buy_subscription(storage, bot):
     message = AsyncMock()
     await buy_subscription(message)
     assert message.answer.called_once_with(
-        f"(Условия подписки)\n", reply_markup=buy_subscription_markup
+        "(Условия подписки)\n", reply_markup=buy_subscription_markup
     )
 
 

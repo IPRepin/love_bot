@@ -8,10 +8,10 @@ from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
+from filters.admins_filter import get_random_admin
 from filters.photo_filter import has_face
 from keyboards.inline import moderation_keyboard
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
-from filters.admins_filter import get_random_admin
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesMenQuestionnaire, UserIdState
 
@@ -20,9 +20,7 @@ men_questionnaires_router = Router()
 db = MensQuestionnaires()
 
 
-@men_questionnaires_router.message(F.text ==
-                                   '🙋‍♂️Заполнить мужскую анкету',
-                                   )
+@men_questionnaires_router.message(F.text == '🙋‍♂️Заполнить мужскую анкету')
 async def add_photo(message: types.Message, state: FSMContext) -> None:
     await state.set_state(StatesMenQuestionnaire.PHOTO)
     await message.answer(
@@ -80,15 +78,18 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@men_questionnaires_router.message(StatesMenQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
+@men_questionnaires_router.message(StatesMenQuestionnaire.FIND,
+                                   F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesMenQuestionnaire.STATUS)
     menu = await gen_replay_keyboard(['Хочу', 'Не хочу'])
-    await message.answer("Вы хотите чтобы ваш контакт в телеграм был виден другим пользователям?", reply_markup=menu)
+    await message.answer("Вы хотите чтобы ваш контакт в телеграм был виден другим пользователям?",
+                         reply_markup=menu)
 
 
-@men_questionnaires_router.message(StatesMenQuestionnaire.STATUS, F.text.casefold().in_(['хочу', 'не хочу']))
+@men_questionnaires_router.message(StatesMenQuestionnaire.STATUS,
+                                   F.text.casefold().in_(['хочу', 'не хочу']))
 async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> None:
     await state.update_data(status=message.text)
     data = await state.get_data()
@@ -122,7 +123,7 @@ async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> N
                                   f"на ...\n"
                                   f"Мы сообщим об успешном прохождении модерации.",
                              reply_markup=edit_profile_markup,
-                             disable_web_page_preview=True,)
+                             disable_web_page_preview=True, )
         logger.info("Added profile man")
     except sqlite3.IntegrityError as error:
         logger.info(error)

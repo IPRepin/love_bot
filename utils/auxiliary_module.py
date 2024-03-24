@@ -33,5 +33,3 @@ def new_file(data, query):
     with open(F'data/{query}_{name_file}.csv', 'w', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(data)
-
-

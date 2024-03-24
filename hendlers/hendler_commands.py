@@ -38,7 +38,8 @@ async def get_start(message: types.Message) -> None:
                                  disable_web_page_preview=True,
                                  )
         else:
-            await message.answer(f"{message.from_user.first_name} вы являетесь администратором бота.\n"
+            await message.answer(f"{message.from_user.first_name}"
+                                 f"вы являетесь администратором бота.\n"
                                  f"В этот чат вам будут приходить анкеты пользователей.",
                                  reply_markup=admin_markup
                                  )
@@ -80,4 +81,4 @@ async def get_start(message: types.Message) -> None:
 
 @router_commands.message(F.text == '/help')
 async def help_command(message: types.Message) -> None:
-    await message.answer(f"- /start - Начать заполнение анкеты;\n")
+    await message.answer("- /start - Начать заполнение анкеты;\n")

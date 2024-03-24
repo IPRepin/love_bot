@@ -158,6 +158,7 @@ async def test_men_state_finish_state(storage, bot):
     await finish_state(message, state=state, bot=bot)
     '''
 
+
 @pytest.mark.asyncio
 async def test_men_state_incorrect_gender(storage, bot):
     message = AsyncMock()

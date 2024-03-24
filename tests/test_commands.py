@@ -11,7 +11,7 @@ async def test_cmd_help():
     message = AsyncMock()
     await help_command(message)
 
-    message.answer.assert_called_once_with(f"- /start - Начать заполнение анкеты;\n")
+    message.answer.assert_called_once_with("- /start - Начать заполнение анкеты;\n")
 
 
 @pytest.mark.asyncio
