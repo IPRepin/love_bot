@@ -6,3 +6,4 @@ venv/
 .idea
 test.py
 db_bot.db
+.venv
