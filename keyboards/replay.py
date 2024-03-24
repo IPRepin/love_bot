@@ -15,9 +15,6 @@ main_markup = ReplyKeyboardMarkup(keyboard=[
 
 edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
-        KeyboardButton(text='💘Найти пару'),
-    ],
-    [
         KeyboardButton(text='✏️Отредактировать анкету'),
     ],
     [

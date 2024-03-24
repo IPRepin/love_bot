@@ -79,10 +79,3 @@ async def edit_questionnaires(message: types.Message, state: FSMContext) -> None
         await women_add_photo(message, state)
     else:
         logger.error(f"Функция edit_questionnaires вызвана, но не отредактировала анкету")
-
-
-@main_users_router.message(F.text == '💘Найти пару')
-async def find_couple(message: types.Message) -> None:
-    await message.answer(f"{message.from_user.first_name} вы можете перейти в бесплатную группу с анкетами.\n"
-                         f"Либо преобрести подписку с анкетами и контактными данными соискателей.\n",
-                         reply_markup=go_to_free_chat)

@@ -28,21 +28,3 @@ confirmation_of_deletion = InlineKeyboardMarkup(
         [InlineKeyboardButton(text="Не удалять", callback_data="cancel")],
     ]
 )
-
-go_to_free_chat = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(
-                text="🆓Перейти в беслатную группу",
-                url='https://t.me/znakm100'
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text="🤩Преобрести подписку",
-                url="https://t.me/+eri-YbFPwbY1OWVi",
-            )
-        ],
-        # [InlineKeyboardButton(text="↩️На главное меню", callback_data="back")],
-    ]
-)
