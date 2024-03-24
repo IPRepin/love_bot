@@ -31,7 +31,7 @@ async def cancel_btn(query: types.CallbackQuery):
         await query.answer()
     elif query.data == 'back':
         await query.message.answer(f"С возвращением {query.message.from_user.first_name}\n"
-                                   f"Хочеш запонить еще одну анкету❓\n"
+                                   f"Давай начнем знакомство?\n"
                                    f"\n"
                                    f"<i>Продолжая, вы принимаете\n"
                                    f"<a href='...'>Пользовательское соглашение</a> "
