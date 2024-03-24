@@ -114,7 +114,7 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                              # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
-                                  f"Спасибо! Ваша анкета отправлена на модерацию.\n"
+                                  f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
                                   f'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
                                   f"на ...\n"
