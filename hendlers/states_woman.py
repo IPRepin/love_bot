@@ -63,7 +63,7 @@ async def add_about(message: types.Message, state: FSMContext) -> None:
     if message.text.isdigit() and int(message.text) >= 18:
         await state.update_data(age=int(message.text), user_url=f"@{message.from_user.username}")
         await state.set_state(StatesWomanQuestionnaire.ABOUT_ME)
-        await message.answer("🎨Ваши увлечения, хобби: ")
+        await message.answer("🎨Увлечения, хобби: ")
     elif message.text.isdigit() and int(message.text) < 18:
         await message.answer("Вам должно быть 18 лет!")
     else:
@@ -82,9 +82,9 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesWomanQuestionnaire.STATUS)
-    menu = await gen_replay_keyboard(['Не хочу'])
+    menu = await gen_replay_keyboard(['Только телеграм'])
     await message.answer("Здесь вы можете оставить свой никнейм в любой из соц сетей\n"
-                         "либо нажмите на кнопку ниже если не хотите оставлять эти данные.",
+                         "либо нажмите на кнопку ниже если хотите оставить только телеграм.",
                          reply_markup=menu)
 
 
