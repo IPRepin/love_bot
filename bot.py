@@ -18,7 +18,6 @@ from utils.commands import register_commands
 from utils.logs_hendler_telegram import TelegramBotHandler
 
 
-
 def create_tables():
     try:
         db_users.create_table_users()

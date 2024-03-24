@@ -63,7 +63,7 @@ async def add_about(message: types.Message, state: FSMContext) -> None:
     if message.text.isdigit() and int(message.text) >= 18:
         await state.update_data(age=int(message.text), user_url=f"@{message.from_user.username}")
         await state.set_state(StatesWomanQuestionnaire.ABOUT_ME)
-        await message.answer("Расcкажите немного о себе: ")
+        await message.answer("🎨Ваши увлечения, хобби: ")
     elif message.text.isdigit() and int(message.text) < 18:
         await message.answer("Вам должно быть 18 лет!")
     else:
@@ -82,14 +82,15 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesWomanQuestionnaire.STATUS)
-    menu = await gen_replay_keyboard(['Хочу', 'Не хочу'])
-    await message.answer("Вы хотите чтобы ваш контакт телеграм был виден другим пользователям?", reply_markup=menu)
+    menu = await gen_replay_keyboard(['Не хочу'])
+    await message.answer("Здесь вы можете оставить свой никнейм в любой из соц сетей\n"
+                         "либо нажмите на кнопку ниже если не хотите оставлять эти данные.",
+                         reply_markup=menu)
 
 
-@woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS,
-                                     F.text.casefold().in_(['хочу', 'не хочу']))
+@woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS)
 async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
-    await state.update_data(status=message.text)
+    await state.update_data(social_network=message.text)
     data = await state.get_data()
     await state.clear()
     photo = data.get('photo')
@@ -103,7 +104,7 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             gender=data.get('sex'),
             age=data.get('age'),
             about_me=data.get('about_me'),
-            status=data.get('status'),
+            social_network=data.get('social_network'),
             finding=data.get('find_gender')
         )
         admin_id = get_random_admin()

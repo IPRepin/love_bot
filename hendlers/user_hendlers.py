@@ -41,9 +41,12 @@ async def cancel_btn(query: types.CallbackQuery):
         await query.answer()
 
 
-@main_users_router.message(F.text == '💞Хочу подписку')
+@main_users_router.message(F.text == '💞Оформить подписку')
 async def buy_subscription(message: types.Message) -> None:
-    await message.answer(f"(Условия подписки)\n", reply_markup=buy_subscription_markup)
+    await message.answer("Возможно Вы не готовы пока оставлять свою анкету,"
+                         " но хотите получить доступ к контактам - "
+                         "это можно сделать оформив подписку.\n",
+                         reply_markup=buy_subscription_markup)
 
 
 @main_users_router.message(F.text == "🗑️Удалить анкету")

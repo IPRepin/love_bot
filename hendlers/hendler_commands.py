@@ -33,7 +33,7 @@ async def get_start(message: types.Message) -> None:
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
                                  f"<a href='...'>Пользовательское соглашение</a>"
-                                 f" и <a href='...'>Политику конфиде нциальности</a>.</i>",
+                                 f" и <a href='...'>Политику конфиденциальности</a>.</i>",
                                  reply_markup=main_markup,
                                  disable_web_page_preview=True,
                                  )

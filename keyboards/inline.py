@@ -12,8 +12,8 @@ buy_subscription_markup = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(
-                text="🤩Преобрести подписку",
-                url="https://t.me/+eri-YbFPwbY1OWVi",
+                text="🤩Оформить подписку",
+                url="https://t.me/podpiska100znak_bot",
             )
         ],
         [InlineKeyboardButton(text="↩️На главное меню", callback_data="cancel")],
