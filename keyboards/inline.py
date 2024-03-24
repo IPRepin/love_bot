@@ -32,6 +32,6 @@ confirmation_of_deletion = InlineKeyboardMarkup(
 send_video = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text="📽Отправить видео",
-                              url="https://t.me/podpiska100znak_bot")]
+                              url="https://t.me/marrrsssssssss")]
     ]
 )
