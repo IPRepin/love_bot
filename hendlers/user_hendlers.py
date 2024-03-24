@@ -8,7 +8,7 @@ from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.states_man import add_photo as men_add_photo
 from hendlers.states_woman import add_photo as women_add_photo
-from keyboards.inline import buy_subscription_markup, go_to_free_chat
+from keyboards.inline import buy_subscription_markup
 from keyboards.replay import main_markup, edit_profile_markup
 
 logger = logging.getLogger(__name__)
@@ -23,8 +23,7 @@ async def cancel_btn(query: types.CallbackQuery):
         await query.message.answer(f"С возвращением\n"                                 
                                    f"\n"
                                    f"<i>Продолжая, вы принимаете\n"
-                                   f"<a href='...'>Пользовательское соглашение</a> "
-                                   f"и <a href='...'>Политику конфиденциальности</a>.</i>",
+                                   f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
                                    reply_markup=main_markup
                                    )
         await query.answer()
@@ -32,8 +31,7 @@ async def cancel_btn(query: types.CallbackQuery):
         await query.message.answer(f"С возвращением\n"
                                    f"\n"
                                    f"<i>Продолжая, вы принимаете\n"
-                                   f"<a href='...'>Пользовательское соглашение</a> "
-                                   f"и <a href='...'>Политику конфиденциальности</a>.</i>",
+                                   f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
                                    reply_markup=edit_profile_markup
                                    )
         await query.answer()

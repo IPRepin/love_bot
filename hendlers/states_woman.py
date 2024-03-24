@@ -8,6 +8,7 @@ from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
+from keyboards.inline import send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from filters.admins_filter import get_random_admin
 from utils.auxiliary_module import administrator_text
@@ -117,10 +118,11 @@ async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                                   f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
                                   f'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
-                                  f"на ...\n"
+                                  f"НАЖАВ НА КНОПКУ '📽Отправить видео'\n"
                                   f"Мы сообщим об успешном прохождении модерации.",
-                             reply_markup=edit_profile_markup,
+                             reply_markup=send_video,
                              disable_web_page_preview=True, )
+        await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
         logger.info("Added profile man")
     except sqlite3.IntegrityError as error:
         logger.error(error)
