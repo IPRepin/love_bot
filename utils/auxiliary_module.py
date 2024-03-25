@@ -14,7 +14,7 @@ def administrator_text(data: dict) -> str:
         form_msg.append(f'{key}: {value}')
         for key, value in data.items()
     ]
-    return "\n".join(form_msg[2:])
+    return "\n".join(form_msg[1:])
 
 
 def moderator_text(data: list) -> str:
@@ -24,7 +24,8 @@ def moderator_text(data: list) -> str:
             f"age: {data[4]}\n"
             f"user_url: {data[5]}\n"
             f"about_me: {data[6]}\n"
-            f"status: {data[7]}\n"
+            f"find_gender: {data[7]}\n"
+            f"social_network: {data[8]}\n"
             )
 
 
