@@ -77,6 +77,7 @@ async def download_female_button(query: types.CallbackQuery,
     new_file(data=data, query='female')
     await query.message.answer("Файл будет сформирован в течении"
                                " нескольких секунд...")
+    await query.answer()
     await asyncio.sleep(5)
     file = FSInputFile(F'data/female_{name_file}.csv')
     try:
