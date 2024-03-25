@@ -78,8 +78,7 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@men_questionnaires_router.message(StatesMenQuestionnaire.FIND,
-                                   F.text.casefold().in_(['парень', 'девушка']))
+@men_questionnaires_router.message(StatesMenQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesMenQuestionnaire.STATUS)
@@ -90,8 +89,8 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
 
 
 @men_questionnaires_router.message(StatesMenQuestionnaire.STATUS)
-async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> None:
-    await state.update_data(status=message.text)
+async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
+    await state.update_data(social_network=message.text)
     data = await state.get_data()
     await state.clear()
     photo = data.get('photo')
@@ -108,13 +107,11 @@ async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> N
             social_network=data.get('social_network'),
             finding=data.get('find_gender')
         )
-        await state.set_state(UserIdState.USER_ID)
-        await state.update_data(user_id=message.from_user.id)
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
                              caption=text,
-                             reply_markup=moderation_keyboard
+                             # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
                                   f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"

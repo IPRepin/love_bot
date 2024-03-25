@@ -79,7 +79,7 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND)
+@woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesWomanQuestionnaire.STATUS)
@@ -90,8 +90,8 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
 
 
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS)
-async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> None:
-    await state.update_data(status=message.text)
+async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
+    await state.update_data(social_network=message.text)
     data = await state.get_data()
     await state.clear()
     photo = data.get('photo')
@@ -108,20 +108,18 @@ async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> N
             social_network=data.get('social_network'),
             finding=data.get('find_gender')
         )
-        await state.set_state(UserIdState.USER_ID)
-        await state.update_data(user_id=message.from_user.id)
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
                              caption=text,
-                             reply_markup=moderation_keyboard
+                             # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
                                   f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
                                   f'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
                                   f"НАЖАВ НА КНОПКУ '📽Отправить видео'\n"
-                                  f"Мы сообщим вам об успешном прохождении модерации.",
+                                  f"Мы сообщим об успешном прохождении модерации.",
                              reply_markup=send_video,
                              disable_web_page_preview=True, )
         await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
