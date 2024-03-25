@@ -22,6 +22,11 @@ class DatabaseUsers(DatabaseConnect):
         parameters = (user_id, user_name, user_url)
         self.execute(sql, parameters, commit=True)
 
+    def user_exists(self, user_id):
+        sql = "SELECT * FROM Users WHERE user_id = ?"
+        parameters = tuple([user_id])
+        return bool(self.execute(sql, parameters, fetchone=True))
+
     def select_all_users(self):
         sql = "SELECT * FROM Users;"
         return self.execute(sql, fetchall=True)
@@ -38,5 +43,10 @@ class DatabaseUsers(DatabaseConnect):
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchone=True)
 
-    def delete_user(self):
+    def delete_users(self):
         self.execute("DELETE FROM Users WHERE TRUE")
+
+    def delete_user(self, user_id):
+        sql = "DELETE FROM Users WHERE user_id = ?"
+        parameters = tuple([user_id])
+        return self.execute(sql, parameters, commit=True)

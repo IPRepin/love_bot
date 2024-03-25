@@ -76,4 +76,5 @@ async def edit_questionnaires(message: types.Message, state: FSMContext) -> None
         db_woman.delete_profile(user_id=message.from_user.id)
         await women_add_photo(message, state)
     else:
+
         logger.error(f"Функция edit_questionnaires вызвана, но не отредактировала анкету")

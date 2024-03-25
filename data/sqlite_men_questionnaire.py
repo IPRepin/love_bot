@@ -41,8 +41,12 @@ class MensQuestionnaires(DatabaseConnect):
         parameters = tuple([user_id])
         return bool(self.execute(sql, parameters, fetchone=True))
 
+    def select_all(self):
+        sql = "SELECT * FROM Mensquestionnaires"
+        return self.execute(sql, fetchall=True)
+
     def select_profile(self, **kwargs):
-        sql = "SELECT * FROM Users WHERE"
+        sql = "SELECT * FROM Mensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchone=True)
 
@@ -50,3 +54,7 @@ class MensQuestionnaires(DatabaseConnect):
         sql = "DELETE FROM Mensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, commit=True)
+
+    def update_moderation(self, moderation: str, user_id: int) -> None:
+        sql = "UPDATE Mensquestionnaires SET moderation=? WHERE user_id=?"
+        return self.execute(sql, parameters=(moderation, user_id), commit=True)

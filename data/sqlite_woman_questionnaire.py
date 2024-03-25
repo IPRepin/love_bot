@@ -29,6 +29,7 @@ class WomanQuestionnaires(DatabaseConnect):
                       social_network, moderation)
         self.execute(sql, parameters, commit=True)
 
+
     @staticmethod
     def format_args(sql, parameters: dict):
         sql += " AND ".join([
@@ -41,6 +42,10 @@ class WomanQuestionnaires(DatabaseConnect):
         parameters = tuple([user_id])
         return bool(self.execute(sql, parameters, fetchone=True))
 
+    def select_all(self):
+        sql = "SELECT * FROM Womansqensquestionnaires"
+        return self.execute(sql, fetchall=True)
+
     def select_profile(self, **kwargs):
         sql = "SELECT * FROM Womansqensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
@@ -50,3 +55,7 @@ class WomanQuestionnaires(DatabaseConnect):
         sql = "DELETE FROM Womansqensquestionnaires WHERE"
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, commit=True)
+
+    def update_moderation(self, moderation: str, user_id: int) -> None:
+        sql = "UPDATE Womansqensquestionnaires SET moderation=? WHERE user_id=?"
+        return self.execute(sql, parameters=(moderation, user_id), commit=True)
