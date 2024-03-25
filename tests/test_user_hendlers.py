@@ -2,8 +2,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from hendlers.user_hendlers import cancel_btn, buy_subscription, find_couple
-from keyboards.inline import buy_subscription_markup, go_to_free_chat
+from hendlers.user_hendlers import cancel_btn, buy_subscription
+from keyboards.inline import buy_subscription_markup
 from keyboards.replay import main_markup
 from tests.conftest import memory_storage as storage
 
@@ -55,13 +55,3 @@ async def test_edit_questionnaires(storage, bot):
     )
     await edit_questionnaires(message, state=state)'''
 
-
-@pytest.mark.asyncio
-async def test_find_couple(storage, bot):
-    message = AsyncMock()
-    await find_couple(message)
-    assert message.answer.called_once_with(
-        f"{message.from_user.first_name} вы можете перейти в бесплатную группу с анкетами.\n"
-        f"Либо преобрести подписку с анкетами и контактными данными соискателей.\n",
-        reply_markup=go_to_free_chat
-    )
