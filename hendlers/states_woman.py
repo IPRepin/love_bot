@@ -92,7 +92,7 @@ async def check_status(message: types.Message, state: FSMContext) -> None:
 
 
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.STATUS)
-async def check_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
+async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> None:
     await state.update_data(social_network=message.text)
     data = await state.get_data()
     await state.clear()
