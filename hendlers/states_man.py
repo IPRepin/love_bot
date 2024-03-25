@@ -10,7 +10,7 @@ from aiogram.fsm.context import FSMContext
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from filters.admins_filter import get_random_admin
 from filters.photo_filter import has_face
-from keyboards.inline import moderation_keyboard
+from keyboards.inline import moderation_keyboard, send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesMenQuestionnaire, UserIdState
@@ -63,7 +63,7 @@ async def add_about(message: types.Message, state: FSMContext) -> None:
     if message.text.isdigit() and int(message.text) >= 18:
         await state.update_data(age=int(message.text), user_url=f"@{message.from_user.username}")
         await state.set_state(StatesMenQuestionnaire.ABOUT_ME)
-        await message.answer("Расcкажите немного о себе: ")
+        await message.answer("🎨Увлечения, хобби: ")
     elif message.text.isdigit() and int(message.text) < 18:
         await message.answer("Вам должно быть 18 лет!")
     else:
@@ -83,13 +83,13 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesMenQuestionnaire.STATUS)
-    menu = await gen_replay_keyboard(['Хочу', 'Не хочу'])
-    await message.answer("Вы хотите чтобы ваш контакт в телеграм был виден другим пользователям?",
+    menu = await gen_replay_keyboard(['Только телеграм'])
+    await message.answer("Здесь вы можете оставить свой никнейм в любой из соц сетей\n"
+                         "либо нажмите на кнопку ниже если хотите оставить только телеграм.",
                          reply_markup=menu)
 
 
-@men_questionnaires_router.message(StatesMenQuestionnaire.STATUS,
-                                   F.text.casefold().in_(['хочу', 'не хочу']))
+@men_questionnaires_router.message(StatesMenQuestionnaire.STATUS)
 async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> None:
     await state.update_data(status=message.text)
     data = await state.get_data()
@@ -105,7 +105,7 @@ async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> N
             age=data.get('age'),
             user_url=data.get('user_url'),
             about_me=data.get('about_me'),
-            status=data.get('status'),
+            social_network=data.get('social_network'),
             finding=data.get('find_gender')
         )
         await state.set_state(UserIdState.USER_ID)
@@ -117,13 +117,14 @@ async def finish_state(message: types.Message, state: FSMContext, bot: Bot) -> N
                              reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
-                                  f"Спасибо! Ваша анкета отправлена на модерацию.\n"
+                                  f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
                                   f"ДОКАЖИТЕ, ЧТО ВЫ НЕ ФЕЙК\n"
                                   f'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
-                                  f"на ...\n"
-                                  f"Мы сообщим об успешном прохождении модерации.",
-                             reply_markup=edit_profile_markup,
+                                  f"НАЖАВ НА КНОПКУ '📽Отправить видео'\n"
+                                  f"Мы сообщим вам об успешном прохождении модерации.",
+                             reply_markup=send_video,
                              disable_web_page_preview=True, )
+        await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
         logger.info("Added profile man")
     except sqlite3.IntegrityError as error:
         logger.info(error)

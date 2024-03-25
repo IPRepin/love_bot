@@ -11,8 +11,8 @@ buy_subscription_markup = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(
-                text="🤩Преобрести подписку",
-                url="https://t.me/+eri-YbFPwbY1OWVi",
+                text="🤩Оформить подписку",
+                url="https://t.me/podpiska100znak_bot",
             )
         ],
         [InlineKeyboardButton(text="↩️На главное меню", callback_data="cancel")],
@@ -27,21 +27,10 @@ confirmation_of_deletion = InlineKeyboardMarkup(
     ]
 )
 
-go_to_free_chat = InlineKeyboardMarkup(
+send_video = InlineKeyboardMarkup(
     inline_keyboard=[
-        [
-            InlineKeyboardButton(
-                text="🆓Перейти в беслатную группу",
-                url='https://t.me/znakm100'
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text="🤩Преобрести подписку",
-                url="https://t.me/+eri-YbFPwbY1OWVi",
-            )
-        ],
-        # [InlineKeyboardButton(text="↩️На главное меню", callback_data="back")],
+        [InlineKeyboardButton(text="📽Отправить видео",
+                              url="https://t.me/marrrsssssssss")]
     ]
 )
 

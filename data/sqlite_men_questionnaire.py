@@ -14,21 +14,19 @@ class MensQuestionnaires(DatabaseConnect):
           age INTEGER NOT NULL,
           about_me VARCHAR(255) NOT NULL,
           finding VARCHAR(50) NOT NULL,
-          status VARCHAR(10) NOT NULL,
+          social_network VARCHAR(50) NOT NULL,
           moderation varchar(50),
           PRIMARY KEY (user_id)
         );"""
         self.execute(sql, commit=True)
 
-    def add_profile(self, user_id, photo, user_name,
-                    user_url, gender, age, about_me,
-                    finding, status,
-                    moderation="Не промодерировано"):
+    def add_profile(self, user_id, photo, user_name, user_url, gender, age, about_me, finding,
+                    social_network, moderation="Не промодерировано"):
         sql = ("INSERT INTO Mensquestionnaires (user_id, photo, user_name, user_url, gender, age,"
-               " about_me, finding, status, moderation)"
+               " about_me, finding, social_network, moderation)"
                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-        parameters = (user_id, photo, user_name, user_url, gender, age,
-                      about_me, finding, status, moderation)
+        parameters = (user_id, photo, user_name, user_url, gender, age, about_me, finding,
+                      social_network, moderation)
         self.execute(sql, parameters, commit=True)
 
     @staticmethod

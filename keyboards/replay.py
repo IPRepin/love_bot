@@ -17,17 +17,12 @@ main_markup = ReplyKeyboardMarkup(keyboard=[
 
 edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
-        KeyboardButton(text='💘Найти пару'),
-    ],
-    [
         KeyboardButton(text='✏️Отредактировать анкету'),
     ],
     [
         KeyboardButton(text='🗑️Удалить анкету'),
     ],
-], resize_keyboard=True,
-    input_field_placeholder="Отредактировать или удалить анкету⬇️",
-    one_time_keyboard=True)
+], resize_keyboard=True, input_field_placeholder="Отредактировать или удалить анкету⬇️", one_time_keyboard=True)
 
 
 async def gen_replay_keyboard(text: str | list):

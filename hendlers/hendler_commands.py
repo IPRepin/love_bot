@@ -29,11 +29,10 @@ async def get_start(message: types.Message) -> None:
                 user_url=message.from_user.username
             )
             await message.answer(f"Привет {message.from_user.first_name}👋\n"
-                                 f"Давай начнем знакомство?\n"
+                                 f"Давайте начнем знакомство?\n"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='...'>Пользовательское соглашение</a>"
-                                 f" и <a href='...'>Политику конфиде нциальности</a>.</i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
                                  reply_markup=main_markup,
                                  disable_web_page_preview=True,
                                  )
@@ -48,32 +47,29 @@ async def get_start(message: types.Message) -> None:
         logger.error("Пользователь с таким id уже существует")
         if db_men.profile_exists(user_id=message.from_user.id):
             await message.answer(f"С возвращением {message.from_user.first_name}\n"
-                                 f"✅Ты уже заполнил анкету анкету.\n"
+                                 f"✅Вы уже заполнили анкету.\n"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='...'>Пользовательское соглашение</a> "
-                                 f"и <a href='...'>Политику конфиденциальности</a>.</i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
                                  reply_markup=edit_profile_markup,
                                  disable_web_page_preview=True,
                                  )
         elif db_woman.profile_exists(user_id=message.from_user.id):
             await message.answer(f"С возвращением {message.from_user.first_name}\n"
-                                 f"✅Ты уже заполнила анкету анкету.\n"
+                                 f"✅Вы уже заполнили анкету.\n"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='...'>Пользовательское соглашение</a> "
-                                 f"и <a href='...'>Политику конфиденциальности</a>.</i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
                                  reply_markup=edit_profile_markup,
                                  disable_web_page_preview=True,
                                  )
         else:
             await message.answer(f"С возвращением {message.from_user.first_name}\n"
-                                 f"У тебя нет до сих пор анкеты😟\n"
-                                 f"Давай заполним?"
+                                 f"У вас до сих пор нет анкеты😟\n"
+                                 f"Давайте заполним?"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='...'>Пользовательское соглашение</a> "
-                                 f"и <a href='...'>Политику конфиденциальности</a>.</i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
                                  reply_markup=main_markup,
                                  disable_web_page_preview=True,
                                  )
