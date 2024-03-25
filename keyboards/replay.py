@@ -9,7 +9,7 @@ main_markup = ReplyKeyboardMarkup(keyboard=[
         KeyboardButton(text='🙋‍♀️Заполнить женскую анкету'),
     ],
     [
-        KeyboardButton(text='💞Хочу подписку'),
+        KeyboardButton(text='💞Оформить подписку'),
     ],
 ], resize_keyboard=True,
     input_field_placeholder="Начни с заполнения анкеты⬇️",
