@@ -34,7 +34,8 @@ async def get_start(message: types.Message) -> None:
                                  f"Давайте начнем знакомство?\n"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>"
+                                 f"Пользовательское соглашение</a></i>",
                                  reply_markup=main_markup,
                                  disable_web_page_preview=True,
                                  )
@@ -52,7 +53,8 @@ async def get_start(message: types.Message) -> None:
                                  f"✅Вы уже заполнили анкету.\n"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>"
+                                 f"Пользовательское соглашение</a></i>",
                                  reply_markup=edit_profile_markup,
                                  disable_web_page_preview=True,
                                  )
@@ -61,7 +63,8 @@ async def get_start(message: types.Message) -> None:
                                  f"✅Вы уже заполнили анкету.\n"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>"
+                                 f"Пользовательское соглашение</a></i>",
                                  reply_markup=edit_profile_markup,
                                  disable_web_page_preview=True,
                                  )
@@ -71,7 +74,8 @@ async def get_start(message: types.Message) -> None:
                                  f"Давайте заполним?"
                                  f"\n"
                                  f"<i>Продолжая, вы принимаете:\n"
-                                 f"<a href='https://znfkomstobot.tilda.ws/'>Пользовательское соглашение</a></i>",
+                                 f"<a href='https://znfkomstobot.tilda.ws/'>"
+                                 f"Пользовательское соглашение</a></i>",
                                  reply_markup=main_markup,
                                  disable_web_page_preview=True,
                                  )

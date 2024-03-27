@@ -136,8 +136,10 @@ async def test_men_state_check_status(storage, bot):
     await check_status(message, state=state)
     assert await state.get_state() == StatesMenQuestionnaire.STATUS
     menu = await gen_replay_keyboard(['Только телеграм'])
-    message.answer.assert_called_once_with("Здесь вы можете оставить свой никнейм в любой из соц сетей\n"
-                                           "либо нажмите на кнопку ниже если хотите оставить только телеграм.",
+    message.answer.assert_called_once_with("Здесь вы можете оставить свой"
+                                           " никнейм в любой из соц сетей\n"
+                                           "либо нажмите на кнопку ниже если"
+                                           " хотите оставить только телеграм.",
                                            reply_markup=menu)
 
 

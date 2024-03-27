@@ -35,8 +35,8 @@ async def add_photo(message: types.Message, state: FSMContext) -> None:
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.PHOTO, F.photo)
 async def add_name(message: types.Message, state: FSMContext, bot: Bot) -> None:
     file_id = message.photo[-1].file_id
-    file = await bot.get_file(file_id)
-    file_path = file.file_path
+    download_file = await bot.get_file(file_id)
+    file_path = download_file.file_path
     file_bytes = await bot.download_file(file_path)
     if has_face(file_bytes):
         await state.update_data(photo=message.photo[-1].file_id)
@@ -81,7 +81,8 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
+@woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND,
+                                     F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesWomanQuestionnaire.STATUS)

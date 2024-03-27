@@ -29,10 +29,10 @@ async def download_all_button(query: types.CallbackQuery,
                                " нескольких секунд...")
     await query.answer()
     await asyncio.sleep(6)
-    file = FSInputFile(F'data/all_{name_file}.csv')
+    download_file = FSInputFile(F'data/all_{name_file}.csv')
     try:
         await bot.send_document(chat_id=query.message.chat.id,
-                                document=file)
+                                document=download_file)
         await asyncio.sleep(6)
         os.remove(F'data/all_{name_file}.csv')
         logger.info("Deleted file")
@@ -54,10 +54,10 @@ async def download_male_button(query: types.CallbackQuery,
                                " нескольких секунд...")
     await query.answer()
     await asyncio.sleep(5)
-    file = FSInputFile(F'data/male_{name_file}.csv')
+    download_file = FSInputFile(F'data/male_{name_file}.csv')
     try:
         await bot.send_document(chat_id=query.message.chat.id,
-                                document=file)
+                                document=download_file)
         await asyncio.sleep(5)
         os.remove(F'data/male_{name_file}.csv')
         logger.info("Deleted file")
@@ -79,10 +79,10 @@ async def download_female_button(query: types.CallbackQuery,
                                " нескольких секунд...")
     await query.answer()
     await asyncio.sleep(5)
-    file = FSInputFile(F'data/female_{name_file}.csv')
+    download_file = FSInputFile(F'data/female_{name_file}.csv')
     try:
         await bot.send_document(chat_id=query.message.chat.id,
-                                document=file)
+                                document=download_file)
         await asyncio.sleep(5)
         os.remove(F'data/female_{name_file}.csv')
         logger.info("Deleted file")
