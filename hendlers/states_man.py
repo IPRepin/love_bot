@@ -113,7 +113,7 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
-                             caption="Пришла новая анкета!\n"
+                             caption="❗❗Пришла новая анкета!❗❗\n"
                                      f"user_id: {message.from_user.id}\n"
                                      f"{text}\n"
                                      f"Нажмите на кнопку '⏩Проверить анкеты'",
