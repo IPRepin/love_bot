@@ -160,7 +160,7 @@ async def check_channel(query: types.CallbackQuery, bot: Bot) -> None:
                                            )
     else:
         await query.message.answer("Вы должны быть подписаны на наш канал",
-                             reply_markup=sub_check_button)
+                                   reply_markup=sub_check_button)
     await query.answer()
 
 

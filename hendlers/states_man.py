@@ -115,8 +115,8 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                              photo=photo,
                              caption="Пришла новая анкета!\n"
                                      f"user_id: {message.from_user.id}\n"
-                                     f"Нажмите на кнопку '⏩Проверить анкеты'"
-                                     # f"{text}",
+                                     f"{text}\n"
+                                     f"Нажмите на кнопку '⏩Проверить анкеты'",
                              # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
