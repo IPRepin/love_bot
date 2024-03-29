@@ -43,7 +43,7 @@ async def connect_telegram():
                        )
     create_tables()
     try:
-        await bot.delete_webhook(drop_pending_updates=True)
+        await bot.delete_webhook(drop_pending_updates=False)
         await dp.start_polling(bot)
         await register_commands(bot)
     except TelegramNetworkError as telegram_err:

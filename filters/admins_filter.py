@@ -1,20 +1,12 @@
 import os
 import random
-
 from typing import List
 
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
-
-
 from dotenv import load_dotenv
 
 load_dotenv()
-
-
-def get_random_admin():
-    admins_ids = os.environ.get("ADMINS_ID").split(",")
-    return random.choice(admins_ids)
 
 
 class AdminsFilter(BaseFilter):
@@ -32,3 +24,8 @@ def admins_filter():
     for admin in os.getenv("ADMINS_ID").split(","):
         admins.append(int(admin))
     return admins
+
+
+def get_random_admin():
+    admins_ids = admins_filter()
+    return random.choice(admins_ids)
