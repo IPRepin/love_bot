@@ -1,5 +1,4 @@
 import logging
-import os
 
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
@@ -8,7 +7,7 @@ from dotenv import load_dotenv
 from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
-from filters.admins_filter import AdminsFilter
+from filters.admins_filter import AdminsFilter, admins_filter
 from keyboards.inline import moderation_keyboard, download_button
 from utils.auxiliary_module import moderator_text
 from utils.states import UserIdState
@@ -22,7 +21,7 @@ main_admin_router = Router()
 
 
 @main_admin_router.callback_query(F.data == 'approved' or F.data == 'rejected',
-                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]),
+                                  AdminsFilter(admins_filter()),
                                   UserIdState.USER_ID
                                   )
 async def moderation_questionnaires(query: types.CallbackQuery,
@@ -51,7 +50,11 @@ async def moderation_questionnaires(query: types.CallbackQuery,
         await bot.send_message(chat_id=user_id,
                                text="🚫Ваша анкета отклонена\n"
                                     "Вы можете отправить новую анкету нажав на кнопку ниже\n"
-                                    "✏️Отредактировать анкету")
+                                    "✏️Отредактировать анкету\n"
+                                    "После заполнения анкеты обязательно"
+                                    'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
+                                    "НАЖАВ НА КНОПКУ '📽Отправить видео'\n"
+                                    "Без этого видео анкета будет отклонена")
         await query.answer()
     elif query.data == 'rejected' and db_woman.profile_exists(user_id=user_id):
         db_woman.update_moderation(user_id=user_id, moderation='Отклонено')
@@ -60,12 +63,16 @@ async def moderation_questionnaires(query: types.CallbackQuery,
         await bot.send_message(chat_id=user_id,
                                text="🚫Ваша анкета отклонена\n"
                                     "Вы можете отправить новую анкету нажав на кнопку ниже\n"
-                                    "✏️Отредактировать анкету")
+                                    "✏️Отредактировать анкету\n"
+                                    "После заполнения анкеты обязательно"
+                                    'ОТПРАВЬТЕ ВИДЕОСООБЩЕНИЕ С ФРАЗОЙ "ДЛЯ КАНАЛА ЗНАКОМСТВ"\n'
+                                    "НАЖАВ НА КНОПКУ '📽Отправить видео'\n"
+                                    "Без этого видео анкета будет отклонена")
         await query.answer()
 
 
 @main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
-                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]),
+                                  AdminsFilter(admins_filter()),
                                   )
 async def not_moderation_questionnaires(query: types.CallbackQuery):
     await query.message.answer("Анкета уже проверена, либо пользователь удалил анкету!")
@@ -73,7 +80,7 @@ async def not_moderation_questionnaires(query: types.CallbackQuery):
 
 
 @main_admin_router.message(F.text == "⏩Проверить анкеты",
-                           AdminsFilter([int(os.getenv("ADMINS_ID"))]), )
+                           AdminsFilter(admins_filter()), )
 async def next_moderation_questionnaires(message: types.Message,
                                          state: FSMContext,
                                          bot: Bot) -> None:
@@ -98,7 +105,7 @@ async def next_moderation_questionnaires(message: types.Message,
 
 
 @main_admin_router.message(F.text == '💾Выгрузить данные пользователей',
-                           AdminsFilter([int(os.getenv("ADMINS_ID"))]),
+                           AdminsFilter(admins_filter()),
                            )
 async def get_questionnaires(message: types.Message) -> None:
     await message.answer("Можно выгрузить всех пользователей бота (не анкеты).\n"

@@ -29,6 +29,7 @@ async def check_sub_channel(chat_member) -> bool:
 
 @router_commands.message(CommandStart())
 async def get_start(message: types.Message, bot: Bot) -> None:
+    logger.info(f"Received start message from {message.from_user.id}")
     if await check_sub_channel(await bot.get_chat_member(chat_id=os.getenv('TG_CHANNEL'),
                                                          user_id=message.from_user.id)):
         try:
