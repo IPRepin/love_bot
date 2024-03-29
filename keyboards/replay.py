@@ -22,7 +22,9 @@ edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
         KeyboardButton(text='🗑️Удалить анкету'),
     ],
-], resize_keyboard=True, input_field_placeholder="Отредактировать или удалить анкету⬇️", one_time_keyboard=True)
+], resize_keyboard=True,
+    input_field_placeholder="Отредактировать или удалить анкету⬇️",
+    one_time_keyboard=True)
 
 
 async def gen_replay_keyboard(text: str | list):
@@ -37,7 +39,7 @@ rmk = ReplyKeyboardRemove()
 
 admin_markup = ReplyKeyboardMarkup(keyboard=[
     [
-        KeyboardButton(text="⏩Следующая анкета"),
+        KeyboardButton(text="⏩Проверить анкеты"),
     ],
     [
         KeyboardButton(text="💾Выгрузить данные пользователей")

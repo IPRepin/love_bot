@@ -6,10 +6,10 @@ import sqlite3
 
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
+from dotenv import load_dotenv
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from filters.admins_filter import get_random_admin
-
 from filters.photo_filter import has_face
 from keyboards.inline import moderation_keyboard, send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
@@ -19,6 +19,7 @@ from utils.states import StatesMenQuestionnaire, UserIdState
 logger = logging.getLogger(__name__)
 men_questionnaires_router = Router()
 db = MensQuestionnaires()
+load_dotenv()
 
 
 @men_questionnaires_router.message(F.text == '🙋‍♂️Заполнить мужскую анкету')
@@ -33,8 +34,8 @@ async def add_photo(message: types.Message, state: FSMContext) -> None:
 @men_questionnaires_router.message(StatesMenQuestionnaire.PHOTO, F.photo)
 async def add_name(message: types.Message, state: FSMContext, bot: Bot) -> None:
     file_id = message.photo[-1].file_id
-    file = await bot.get_file(file_id)
-    file_path = file.file_path
+    download_file = await bot.get_file(file_id)
+    file_path = download_file.file_path
     file_bytes = await bot.download_file(file_path)
     if has_face(file_bytes):
         await state.update_data(photo=message.photo[-1].file_id)
@@ -79,7 +80,8 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@men_questionnaires_router.message(StatesMenQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
+@men_questionnaires_router.message(StatesMenQuestionnaire.FIND,
+                                   F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesMenQuestionnaire.STATUS)
@@ -111,7 +113,10 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
-                             caption=text,
+                             caption="Пришла новая анкета!\n"
+                                     f"user_id: {message.from_user.id}\n"
+                                     f"{text}\n"
+                                     f"Нажмите на кнопку '⏩Проверить анкеты'",
                              # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"

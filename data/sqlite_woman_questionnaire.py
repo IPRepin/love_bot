@@ -22,13 +22,13 @@ class WomanQuestionnaires(DatabaseConnect):
 
     def add_profile(self, user_id, photo, user_name, user_url, gender, age, about_me, finding,
                     social_network, moderation="Не промодерировано"):
-        sql = ("INSERT INTO Womansqensquestionnaires (user_id, photo, user_name, user_url, gender, age,"
+        sql = ("INSERT INTO Womansqensquestionnaires (user_id, photo, user_name,"
+               "user_url, gender, age,"
                " about_me, finding, social_network, moderation)"
                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
         parameters = (user_id, photo, user_name, user_url, gender, age, about_me, finding,
                       social_network, moderation)
         self.execute(sql, parameters, commit=True)
-
 
     @staticmethod
     def format_args(sql, parameters: dict):

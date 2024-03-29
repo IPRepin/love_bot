@@ -6,20 +6,20 @@ import sqlite3
 
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
+from dotenv import load_dotenv
 
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
-
 from filters.admins_filter import get_random_admin
 from filters.photo_filter import has_face
 from keyboards.inline import moderation_keyboard, send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
-
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesWomanQuestionnaire, UserIdState
 
 logger = logging.getLogger(__name__)
 woman_questionnaires_router = Router()
 db = WomanQuestionnaires()
+load_dotenv()
 
 
 @woman_questionnaires_router.message(F.text == '🙋‍♀️Заполнить женскую анкету')
@@ -35,8 +35,8 @@ async def add_photo(message: types.Message, state: FSMContext) -> None:
 @woman_questionnaires_router.message(StatesWomanQuestionnaire.PHOTO, F.photo)
 async def add_name(message: types.Message, state: FSMContext, bot: Bot) -> None:
     file_id = message.photo[-1].file_id
-    file = await bot.get_file(file_id)
-    file_path = file.file_path
+    download_file = await bot.get_file(file_id)
+    file_path = download_file.file_path
     file_bytes = await bot.download_file(file_path)
     if has_face(file_bytes):
         await state.update_data(photo=message.photo[-1].file_id)
@@ -81,7 +81,8 @@ async def add_find_me(message: types.Message, state: FSMContext) -> None:
     await message.answer("Кого вы хотите найти?", reply_markup=menu)
 
 
-@woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND, F.text.casefold().in_(['парень', 'девушка']))
+@woman_questionnaires_router.message(StatesWomanQuestionnaire.FIND,
+                                     F.text.casefold().in_(['парень', 'девушка']))
 async def check_status(message: types.Message, state: FSMContext) -> None:
     await state.update_data(find_gender=message.text)
     await state.set_state(StatesWomanQuestionnaire.STATUS)
@@ -96,11 +97,12 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
     await state.update_data(social_network=message.text)
     data = await state.get_data()
     await state.clear()
+    user_id = message.from_user.id
     photo = data.get('photo')
     text = administrator_text(data)
     try:
         db.add_profile(
-            user_id=message.from_user.id,
+            user_id=user_id,
             photo=photo,
             user_name=data.get('name'),
             user_url=data.get('user_url'),
@@ -113,7 +115,10 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
-                             caption=text,
+                             caption="Пришла новая анкета!\n"
+                                     f"user_id: {message.from_user.id}\n"
+                                     f"{text}\n"
+                                     f"Нажмите на кнопку '⏩Проверить анкеты'",
                              # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
@@ -125,7 +130,7 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                              reply_markup=send_video,
                              disable_web_page_preview=True, )
         await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
-        logger.info("Added profile man")
+        logger.info("Added profile woman")
     except sqlite3.IntegrityError as error:
         logger.error(error)
         logger.error("Пользователь уже зарегистрирован")
