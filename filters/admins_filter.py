@@ -25,3 +25,10 @@ class AdminsFilter(BaseFilter):
         if isinstance(self.admin_ids, int):
             return message.from_user.id == self.admin_ids
         return message.from_user.id in self.admin_ids
+
+
+def admins_filter():
+    admins = []
+    for admin in os.getenv("ADMINS_ID").split(","):
+        admins.append(int(admin))
+    return admins
