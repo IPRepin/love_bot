@@ -39,7 +39,7 @@ rmk = ReplyKeyboardRemove()
 
 admin_markup = ReplyKeyboardMarkup(keyboard=[
     [
-        KeyboardButton(text="⏩Следующая анкета"),
+        KeyboardButton(text="⏩Проверить анкеты"),
     ],
     [
         KeyboardButton(text="💾Выгрузить данные пользователей")

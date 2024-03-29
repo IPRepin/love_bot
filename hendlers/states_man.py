@@ -6,10 +6,10 @@ import sqlite3
 
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
+from dotenv import load_dotenv
 
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from filters.admins_filter import get_random_admin
-
 from filters.photo_filter import has_face
 from keyboards.inline import moderation_keyboard, send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
@@ -19,6 +19,7 @@ from utils.states import StatesMenQuestionnaire, UserIdState
 logger = logging.getLogger(__name__)
 men_questionnaires_router = Router()
 db = MensQuestionnaires()
+load_dotenv()
 
 
 @men_questionnaires_router.message(F.text == '🙋‍♂️Заполнить мужскую анкету')
@@ -112,9 +113,11 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
-                             caption=f"user_id: {message.from_user.id}\n"
-                                     f"{text}",
-                             reply_markup=moderation_keyboard
+                             caption="Пришла новая анкета!\n"
+                                     f"user_id: {message.from_user.id}\n"
+                                     f"Нажмите на кнопку '⏩Проверить анкеты'"
+                                     # f"{text}",
+                             # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
                                   f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
@@ -126,8 +129,6 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                              disable_web_page_preview=True, )
         await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
         logger.info("Added profile man")
-        await state.set_state(UserIdState.USER_ID)
-        await state.update_data(user_id=message.from_user.id)
     except sqlite3.IntegrityError as error:
         logger.info(error)
         logger.error("Пользователь уже зарегистрирован")

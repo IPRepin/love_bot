@@ -6,20 +6,20 @@ import sqlite3
 
 from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
+from dotenv import load_dotenv
 
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
-
 from filters.admins_filter import get_random_admin
 from filters.photo_filter import has_face
 from keyboards.inline import moderation_keyboard, send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
-
 from utils.auxiliary_module import administrator_text
 from utils.states import StatesWomanQuestionnaire, UserIdState
 
 logger = logging.getLogger(__name__)
 woman_questionnaires_router = Router()
 db = WomanQuestionnaires()
+load_dotenv()
 
 
 @woman_questionnaires_router.message(F.text == '🙋‍♀️Заполнить женскую анкету')
@@ -97,11 +97,12 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
     await state.update_data(social_network=message.text)
     data = await state.get_data()
     await state.clear()
+    user_id = message.from_user.id
     photo = data.get('photo')
     text = administrator_text(data)
     try:
         db.add_profile(
-            user_id=message.from_user.id,
+            user_id=user_id,
             photo=photo,
             user_name=data.get('name'),
             user_url=data.get('user_url'),
@@ -114,9 +115,11 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
-                             caption=f"user_id: {message.from_user.id}\n"
-                                     f"{text}",
-                             reply_markup=moderation_keyboard
+                             caption="Пришла новая анкета!\n"
+                                     f"user_id: {message.from_user.id}\n"
+                                     f"Нажмите на кнопку '⏩Проверить анкеты'"
+                                     # f"{text}",
+                             # reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
                                   f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
@@ -127,9 +130,7 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                              reply_markup=send_video,
                              disable_web_page_preview=True, )
         await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
-        logger.info("Added profile man")
-        await state.set_state(UserIdState.USER_ID)
-        await state.update_data(user_id=message.from_user.id)
+        logger.info("Added profile woman")
     except sqlite3.IntegrityError as error:
         logger.error(error)
         logger.error("Пользователь уже зарегистрирован")

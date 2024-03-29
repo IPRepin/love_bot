@@ -19,13 +19,13 @@ def administrator_text(data: dict) -> str:
 
 def moderator_text(data: list) -> str:
     return (f"user_id: {data[0]}\n"
-            f"name: {data[2]}\n"
-            f"sex: {data[3]}\n"
-            f"age: {data[4]}\n"
-            f"user_url: {data[5]}\n"
-            f"about_me: {data[6]}\n"
-            f"find_gender: {data[7]}\n"
-            f"social_network: {data[8]}\n"
+            f"Имя: {data[2]}\n"
+            f"user_url: {data[3]}\n"
+            f"Пол: {data[4]}\n"
+            f"Возраст: {data[5]}\n"
+            f"Обо мне: {data[6]}\n"
+            f"Хочу найти: {data[7]}\n"
+            f"Связь: {data[8]}\n"
             )
 
 

@@ -21,9 +21,10 @@ db_users = DatabaseUsers()
 main_admin_router = Router()
 
 
-@main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
+@main_admin_router.callback_query(F.data == 'approved' or F.data == 'rejected',
                                   AdminsFilter([int(os.getenv("ADMINS_ID"))]),
-                                  UserIdState.USER_ID)
+                                  UserIdState.USER_ID
+                                  )
 async def moderation_questionnaires(query: types.CallbackQuery,
                                     bot: Bot,
                                     state: FSMContext) -> None:
@@ -33,17 +34,20 @@ async def moderation_questionnaires(query: types.CallbackQuery,
     logger.info(f'user_id: {user_id}')
     if query.data == 'approved' and db_men.profile_exists(user_id=user_id):
         db_men.update_moderation(user_id=user_id, moderation='Одобрено')
-        await query.message.answer("✅Анкета одобрена")
+        await query.message.answer("✅Анкета одобрена, пользователю отправлено"
+                                   "уведомление о результате проверки")
         await query.answer()
         await bot.send_message(chat_id=user_id, text="✅Ваша анкета одобрена")
     elif query.data == 'approved' and db_woman.profile_exists(user_id=user_id):
         db_woman.update_moderation(user_id=user_id, moderation='Одобрено')
-        await query.message.answer("✅Анкета одобрена")
+        await query.message.answer("✅Анкета одобрена, пользователю отправлено"
+                                   "уведомление о результате проверки")
         await bot.send_message(chat_id=user_id, text="✅Ваша анкета одобрена")
         await query.answer()
     elif query.data == 'rejected' and db_men.profile_exists(user_id=user_id):
         db_men.update_moderation(user_id=user_id, moderation='Отклонено')
-        await query.message.answer("🚫Анкета отклонена")
+        await query.message.answer("🚫Анкета отклонена, пользователю отправлено"
+                                   "уведомление о результате проверки")
         await bot.send_message(chat_id=user_id,
                                text="🚫Ваша анкета отклонена\n"
                                     "Вы можете отправить новую анкету нажав на кнопку ниже\n"
@@ -51,7 +55,8 @@ async def moderation_questionnaires(query: types.CallbackQuery,
         await query.answer()
     elif query.data == 'rejected' and db_woman.profile_exists(user_id=user_id):
         db_woman.update_moderation(user_id=user_id, moderation='Отклонено')
-        await query.message.answer("🚫Анкета отклонена")
+        await query.message.answer("🚫Анкета отклонена, пользователю отправлено"
+                                   "уведомление о результате проверки")
         await bot.send_message(chat_id=user_id,
                                text="🚫Ваша анкета отклонена\n"
                                     "Вы можете отправить новую анкету нажав на кнопку ниже\n"
@@ -60,13 +65,14 @@ async def moderation_questionnaires(query: types.CallbackQuery,
 
 
 @main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
-                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]), )
+                                  AdminsFilter([int(os.getenv("ADMINS_ID"))]),
+                                  )
 async def not_moderation_questionnaires(query: types.CallbackQuery):
     await query.message.answer("Анкета уже проверена, либо пользователь удалил анкету!")
     await query.answer()
 
 
-@main_admin_router.message(F.text == "⏩Следующая анкета",
+@main_admin_router.message(F.text == "⏩Проверить анкеты",
                            AdminsFilter([int(os.getenv("ADMINS_ID"))]), )
 async def next_moderation_questionnaires(message: types.Message,
                                          state: FSMContext,
