@@ -114,8 +114,9 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
         admin_id = get_random_admin()
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
-                             caption=text,
-                             # reply_markup=moderation_keyboard
+                             caption=f"user_id: {message.from_user.id}\n"
+                                     f"{text}",
+                             reply_markup=moderation_keyboard
                              )
         await message.answer(text=f"{data.get('name')}\n"
                                   f"✅Спасибо! Ваша анкета отправлена на модерацию.\n"
@@ -127,6 +128,8 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
                              disable_web_page_preview=True, )
         await message.answer("Меню⬇️", reply_markup=edit_profile_markup)
         logger.info("Added profile man")
+        await state.set_state(UserIdState.USER_ID)
+        await state.update_data(user_id=message.from_user.id)
     except sqlite3.IntegrityError as error:
         logger.error(error)
         logger.error("Пользователь уже зарегистрирован")
