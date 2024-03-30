@@ -59,7 +59,7 @@ async def delete_questionnaires(message: types.Message) -> None:
                              reply_markup=main_markup)
     elif db_woman.profile_exists(user_id=message.from_user.id):
         db_woman.delete_profile(user_id=message.from_user.id)
-        db_users.availability_questionnaire(questionnaire="НЕТ",
+        db_users.availability_questionnaire(questionnaire="УДАЛИЛ",
                                             user_id=message.from_user.id)
         await message.answer(f"{message.from_user.first_name}\n"
                              "Ваша анкета была удалена.\n"

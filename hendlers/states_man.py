@@ -113,7 +113,7 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             finding=data.get('find_gender')
         )
         admin_id = get_random_admin()
-        db_users.availability_questionnaire(questionnaire="ЕСТЬ",
+        db_users.availability_questionnaire(questionnaire="УДАЛИЛ",
                                             user_id=message.from_user.id)
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
