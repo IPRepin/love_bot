@@ -22,6 +22,9 @@ edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
         KeyboardButton(text='🗑️Удалить анкету'),
     ],
+[
+        KeyboardButton(text='📩Связаться с администратором'),
+    ],
 ], resize_keyboard=True,
     input_field_placeholder="Отредактировать или удалить анкету⬇️",
     one_time_keyboard=True)

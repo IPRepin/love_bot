@@ -8,7 +8,7 @@ from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.states_man import add_photo as men_add_photo
 from hendlers.states_woman import add_photo as women_add_photo
-from keyboards.inline import buy_subscription_markup
+from keyboards.inline import buy_subscription_markup, support_button
 from keyboards.replay import main_markup, edit_profile_markup
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ db_woman = WomanQuestionnaires()
 main_users_router = Router()
 
 
-@main_users_router.callback_query(F.data == 'cancel' or F.data == 'back')
+@main_users_router.callback_query(F.data.in_(['cancel', 'cancel_main']))
 async def cancel_btn(query: types.CallbackQuery):
     if query.data == 'cancel':
         await query.message.answer("С возвращением\n"
@@ -28,12 +28,8 @@ async def cancel_btn(query: types.CallbackQuery):
                                    reply_markup=main_markup
                                    )
         await query.answer()
-    elif query.data == 'back':
-        await query.message.answer("С возвращением\n"
-                                   "\n"
-                                   "<i>Продолжая, вы принимаете\n"
-                                   "<a href='https://znfkomstobot.tilda.ws/'>"
-                                   "Пользовательское соглашение</a></i>",
+    elif query.data == 'cancel_main':
+        await query.message.answer('Главное меню',
                                    reply_markup=edit_profile_markup
                                    )
         await query.answer()
@@ -80,3 +76,11 @@ async def edit_questionnaires(message: types.Message, state: FSMContext) -> None
     else:
 
         logger.error("Функция edit_questionnaires вызвана, но не отредактировала анкету")
+
+
+@main_users_router.message(F.text == '📩Связатся с администратором')
+async def write_administrator(message: types.Message) -> None:
+    await message.answer(f"{message.from_user.first_name} если у вас "
+                         f"возникли вопросы по заполнению анкеты, свяжитесь "
+                         f"с нами нажав кнопку ниже ⬇️",
+                         reply_markup=support_button)

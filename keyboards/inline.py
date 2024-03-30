@@ -1,16 +1,11 @@
 import os
-from dotenv import load_dotenv
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardButton
+from dotenv import load_dotenv
 
 load_dotenv()
 
-channel_markup = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [InlineKeyboardButton(text="↩️На главное меню", callback_data="cancel")],
-    ]
-)
 
 buy_subscription_markup = InlineKeyboardMarkup(
     inline_keyboard=[
@@ -64,5 +59,14 @@ sub_check_button = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text="👉ПОДПИСАТСЯ", url=os.getenv('TG_CHANNEL_URL'))],
         [InlineKeyboardButton(text="✅Я ПОДПИСАЛСЯ", callback_data="check_channel")]
+    ]
+)
+
+support_button = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="📨Написать администратору",
+                              url=os.getenv("VIDEO_CHANNEL"))],
+        [InlineKeyboardButton(text="↩️На главное меню",
+                              callback_data="cancel_main")],
     ]
 )
