@@ -10,13 +10,22 @@ from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from filters.admins_filter import AdminsFilter, admins_filter
 from keyboards.inline import moderation_keyboard, download_button
 from utils.auxiliary_module import moderator_text
+from utils.logs_hendler_telegram import TelegramBotHandler
 from utils.states import UserIdState
 
 logger = logging.getLogger(__name__)
+telegram_log_handler = TelegramBotHandler()
+logging.basicConfig(
+        handlers=logger.addHandler(telegram_log_handler),
+        level=logging.ERROR,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 load_dotenv()
+
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()
 db_users = DatabaseUsers()
+
 main_admin_router = Router()
 
 
