@@ -4,6 +4,7 @@ import logging
 from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
 
+from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.states_man import add_photo as men_add_photo
@@ -14,6 +15,7 @@ from keyboards.replay import main_markup, edit_profile_markup
 logger = logging.getLogger(__name__)
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()
+db_users = DatabaseUsers()
 main_users_router = Router()
 
 
@@ -49,12 +51,16 @@ async def delete_questionnaires(message: types.Message) -> None:
     logger.info(f"{message.from_user.id}")
     if db_men.profile_exists(user_id=message.from_user.id):
         db_men.delete_profile(user_id=message.from_user.id)
+        db_users.availability_questionnaire(questionnaire="НЕТ",
+                                            user_id=message.from_user.id)
         await message.answer(f"{message.from_user.first_name}\n"
                              "Ваша анкета была удалена.\n"
                              "Хотите заполнить новую?",
                              reply_markup=main_markup)
     elif db_woman.profile_exists(user_id=message.from_user.id):
         db_woman.delete_profile(user_id=message.from_user.id)
+        db_users.availability_questionnaire(questionnaire="НЕТ",
+                                            user_id=message.from_user.id)
         await message.answer(f"{message.from_user.first_name}\n"
                              "Ваша анкета была удалена.\n"
                              "Хотите заполнить новую?",

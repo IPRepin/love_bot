@@ -9,6 +9,7 @@ class DatabaseUsers(DatabaseConnect):
           user_name VARCHAR(255) NOT NULL,
           user_id INTEGER NOT NULL,
           user_url VARCHAR(255),
+          questionnaire VARCHAR(255) NOT NULL,
           PRIMARY KEY (user_id)
         );"""
         self.execute(sql, commit=True)
@@ -17,10 +18,15 @@ class DatabaseUsers(DatabaseConnect):
                  user_id: int,
                  user_name: str,
                  user_url: str = None,
+                 questionnaire: str = "НЕТ",
                  ):
-        sql = "INSERT INTO Users (user_id, user_name, user_url) VALUES (?, ?, ?)"
-        parameters = (user_id, user_name, user_url)
+        sql = "INSERT INTO Users (user_id, user_name, user_url, questionnaire) VALUES (?,?,?,?)"
+        parameters = (user_id, user_name, user_url, questionnaire,)
         self.execute(sql, parameters, commit=True)
+
+    def availability_questionnaire(self, questionnaire: str, user_id: int):
+        sql = "UPDATE Users SET questionnaire=? WHERE user_id=?"
+        return self.execute(sql, parameters=(questionnaire, user_id), commit=True)
 
     def user_exists(self, user_id):
         sql = "SELECT * FROM Users WHERE user_id = ?"
