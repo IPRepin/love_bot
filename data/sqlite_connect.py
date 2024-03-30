@@ -3,8 +3,15 @@ import sqlite3
 from dotenv import load_dotenv
 import os
 
+from utils.logs_hendler_telegram import TelegramBotHandler
+
 load_dotenv()
 logger = logging.getLogger(__name__)
+telegram_log_handler = TelegramBotHandler()
+logging.basicConfig(
+    handlers=logger.addHandler(telegram_log_handler),
+    level=logging.ERROR,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 class DatabaseConnect:

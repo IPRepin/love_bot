@@ -1,4 +1,14 @@
+import logging
+
 from data.sqlite_connect import DatabaseConnect
+from utils.logs_hendler_telegram import TelegramBotHandler
+
+logger = logging.getLogger(__name__)
+telegram_log_handler = TelegramBotHandler()
+logging.basicConfig(
+    handlers=logger.addHandler(telegram_log_handler),
+    level=logging.ERROR,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 class WomanQuestionnaires(DatabaseConnect):

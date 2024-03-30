@@ -15,9 +15,16 @@ from filters.photo_filter import has_face
 from keyboards.inline import send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from utils.auxiliary_module import administrator_text
+from utils.logs_hendler_telegram import TelegramBotHandler
 from utils.states import StatesWomanQuestionnaire
 
 logger = logging.getLogger(__name__)
+telegram_log_handler = TelegramBotHandler()
+logging.basicConfig(
+        handlers=logger.addHandler(telegram_log_handler),
+        level=logging.ERROR,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 woman_questionnaires_router = Router()
 db = WomanQuestionnaires()
 db_users = DatabaseUsers()
