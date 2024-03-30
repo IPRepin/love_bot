@@ -92,8 +92,9 @@ async def edit_questionnaires(message: types.Message, state: FSMContext) -> None
         logger.error("Функция edit_questionnaires вызвана, но не отредактировала анкету")
 
 
-@main_users_router.message(F.text == '📩Связатся с администратором')
+@main_users_router.message(F.text == '📩Связаться с администратором')
 async def write_administrator(message: types.Message) -> None:
+    logger.info("Функция edit_questionnaires вызвана")
     await message.answer(f"{message.from_user.first_name} если у вас "
                          f"возникли вопросы по заполнению анкеты, свяжитесь "
                          f"с нами нажав кнопку ниже ⬇️",
