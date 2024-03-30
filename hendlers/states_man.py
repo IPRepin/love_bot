@@ -8,17 +8,19 @@ from aiogram import types, Router, F, Bot
 from aiogram.fsm.context import FSMContext
 from dotenv import load_dotenv
 
+from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from filters.admins_filter import get_random_admin
 from filters.photo_filter import has_face
-from keyboards.inline import moderation_keyboard, send_video
+from keyboards.inline import send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from utils.auxiliary_module import administrator_text
-from utils.states import StatesMenQuestionnaire, UserIdState
+from utils.states import StatesMenQuestionnaire
 
 logger = logging.getLogger(__name__)
 men_questionnaires_router = Router()
 db = MensQuestionnaires()
+db_users = DatabaseUsers()
 load_dotenv()
 
 
@@ -111,6 +113,8 @@ async def final_status(message: types.Message, state: FSMContext, bot: Bot) -> N
             finding=data.get('find_gender')
         )
         admin_id = get_random_admin()
+        db_users.availability_questionnaire(questionnaire="УДАЛИЛ",
+                                            user_id=message.from_user.id)
         await bot.send_photo(chat_id=admin_id,
                              photo=photo,
                              caption="❗❗Пришла новая анкета!❗❗\n"

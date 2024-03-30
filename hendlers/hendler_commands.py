@@ -38,8 +38,7 @@ async def get_start(message: types.Message, bot: Bot) -> None:
                 DatabaseUsers().add_user(
                     user_id=message.from_user.id,
                     user_name=message.from_user.first_name,
-
-                    user_url=message.from_user.username
+                    user_url=message.from_user.username,
 
                 )
                 await message.answer(f"Привет {message.from_user.first_name}👋\n"
