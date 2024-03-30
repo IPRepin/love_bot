@@ -20,7 +20,7 @@ db_users = DatabaseUsers()
 main_admin_router = Router()
 
 
-@main_admin_router.callback_query(F.data == 'approved' or F.data == 'rejected',
+@main_admin_router.callback_query(F.data.in_(['approved', 'rejected']),
                                   AdminsFilter(admins_filter()),
                                   UserIdState.USER_ID
                                   )
