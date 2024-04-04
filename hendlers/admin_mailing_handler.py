@@ -7,7 +7,10 @@ from pydantic import ValidationError
 
 from data.sqlite_db_users import DatabaseUsers
 from filters.admins_filter import AdminsFilter, admins_filter
-from keyboards.inline import mail_users_keyboard, get_confirm_button, add_mailing_button, confirm_maling_button
+from keyboards.inline import (mail_users_keyboard,
+                              get_confirm_button,
+                              add_mailing_button,
+                              confirm_maling_button)
 from keyboards.replay import admin_markup
 from utils.logs_hendler_telegram import TelegramBotHandler
 from utils.states import MailingState
@@ -26,7 +29,8 @@ logging.basicConfig(
 @mailing_router.message(F.text == '📨Отправить рассылку',
                         AdminsFilter(admins_filter()),
                         )
-async def get_mailing(message: types.Message, state: FSMContext):
+async def get_mailing(message: types.Message,
+                      state: FSMContext):
     await message.answer("Кому хотим отправить рассылку?", reply_markup=mail_users_keyboard)
     await state.set_state(MailingState.CALL_MAILING)
 
@@ -40,7 +44,8 @@ async def get_mailing(message: types.Message, state: FSMContext):
     AdminsFilter(admins_filter()),
     MailingState.CALL_MAILING,
 )
-async def send_all_users(call: types.CallbackQuery, state: FSMContext):
+async def send_all_users(call: types.CallbackQuery,
+                         state: FSMContext):
     await state.update_data(call=call.data)
     await state.set_state(MailingState.MAIL_TEXT)
     await call.message.answer("Добавьте текст к рассылке")
@@ -55,7 +60,6 @@ async def add_button_choice(message: types.Message, state: FSMContext):
     await state.set_state(MailingState.ADD_BUTTON)
     await message.answer("Добавьте кнопку к рассылке",
                          reply_markup=get_confirm_button())
-
 
 
 @mailing_router.callback_query(MailingState.ADD_BUTTON,
@@ -81,7 +85,8 @@ async def add_button_mailing(call: types.CallbackQuery,
 async def get_text_button(message: types.Message, state: FSMContext):
     await state.update_data(button_text=message.text)
     await message.answer("Теперь добавь ссылку для кнопки, например\n"
-                         "https://ya.ru/")
+                         "https://ya.ru/",
+                         disable_web_page_preview=True)
     await state.set_state(MailingState.BUTTON_URL)
 
 
@@ -100,7 +105,10 @@ async def confirm(
         chat_id: int,
         reply_markup: InlineKeyboardMarkup = None,
 ):
-    await bot.send_photo(chat_id, photo=photo_id, caption=message_text, reply_markup=reply_markup)
+    await bot.send_photo(chat_id=chat_id,
+                         photo=photo_id,
+                         caption=message_text,
+                         reply_markup=reply_markup)
     await message.answer("Вот рассылка которая будет оправлена"
                          "Подтвердить отрпавку.",
                          reply_markup=confirm_maling_button
@@ -114,7 +122,11 @@ async def sending_mailing(message: types.Message, bot: Bot, state: FSMContext):
     message_text = data.get("mailing_text")
     chat_id = int(data.get("chat_id"))
     photo_id = data.get("photo")
-    await confirm(message=message, bot=bot, photo_id=photo_id, message_text=message_text, chat_id=chat_id)
+    await confirm(message=message,
+                  bot=bot,
+                  photo_id=photo_id,
+                  message_text=message_text,
+                  chat_id=chat_id)
 
 
 @mailing_router.callback_query(
@@ -164,4 +176,5 @@ async def sender_mailing(
         await call.message.answer("Вы отменили рассылку")
     await call.answer()
     await call.message.answer("Главное меню", reply_markup=admin_markup)
-# TODO сделать функции для отправки рассылки пользователям бота
+# TODO сделать функции проверок контекта, добавить паузу между сообщениями
+# TODO выявить и обработать исключения
