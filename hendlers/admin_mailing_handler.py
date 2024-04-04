@@ -77,7 +77,7 @@ async def add_button_mailing(call: types.CallbackQuery,
     elif call.data == 'no_mailing_button':
         await call.message.edit_reply_markup(reply_markup=None)
         await call.message.answer("Добавь фото к рассылке")
-        await state.set_state(MailingState.ADD_PHOTO)
+        await state.set_state(MailingState.ADD_MEDIA)
     await call.answer()
 
 
@@ -93,7 +93,7 @@ async def get_text_button(message: types.Message, state: FSMContext):
 @mailing_router.message(MailingState.BUTTON_URL)
 async def get_url_button(message: types.Message, state: FSMContext):
     await state.update_data(button_url=message.text)
-    await state.set_state(MailingState.ADD_PHOTO)
+    await state.set_state(MailingState.ADD_MEDIA)
     await message.answer("Добавь фото к рассылке")
 
 
@@ -115,7 +115,7 @@ async def confirm(
                          )
 
 
-@mailing_router.message(MailingState.ADD_PHOTO, F.photo)
+@mailing_router.message(MailingState.ADD_MEDIA, F.photo)
 async def sending_mailing(message: types.Message, bot: Bot, state: FSMContext):
     await state.update_data(photo=message.photo[-1].file_id)
     data = await state.get_data()

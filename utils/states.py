@@ -34,7 +34,7 @@ class UserIdState(StatesGroup):
 class MailingState(StatesGroup):
     CALL_MAILING = State()
     MAIL_TEXT = State()
-    ADD_PHOTO = State()
+    ADD_MEDIA = State()
     ADD_BUTTON = State()
     BUTTON_TEXT = State()
     BUTTON_URL = State()
