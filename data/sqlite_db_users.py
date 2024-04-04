@@ -10,6 +10,7 @@ logging.basicConfig(
     level=logging.ERROR,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+
 class DatabaseUsers(DatabaseConnect):
 
     def create_table_users(self):
@@ -65,3 +66,12 @@ class DatabaseUsers(DatabaseConnect):
         sql = "DELETE FROM Users WHERE user_id = ?"
         parameters = tuple([user_id])
         return self.execute(sql, parameters, commit=True)
+
+    def select_all_user_by_id(self):
+        sql = "SELECT user_id FROM Users"
+        return self.execute(sql, fetchall=True)
+
+    def select_all_users_by_params(self, **kwargs):
+        sql = "SELECT user_id FROM Users WHERE"
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, fetchall=True)

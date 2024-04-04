@@ -1,17 +1,10 @@
 import logging
-import sqlite3
-from dotenv import load_dotenv
 import os
+import sqlite3
 
-from utils.logs_hendler_telegram import TelegramBotHandler
+from dotenv import load_dotenv
 
 load_dotenv()
-logger = logging.getLogger(__name__)
-telegram_log_handler = TelegramBotHandler()
-logging.basicConfig(
-    handlers=logger.addHandler(telegram_log_handler),
-    level=logging.ERROR,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 class DatabaseConnect:
@@ -31,7 +24,7 @@ class DatabaseConnect:
         if not parameters:
             parameters = tuple()
         connection = self.connect
-        # connection.set_trace_callback(logger_bd)
+        connection.set_trace_callback(logger_bd)
         cursor = connection.cursor()
         data = None
         with connection:
@@ -47,7 +40,7 @@ class DatabaseConnect:
 
 def logger_bd(stattement):
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.ERROR,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     logging.info(f"""
     ________________________________________

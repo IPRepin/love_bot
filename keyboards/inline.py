@@ -1,10 +1,30 @@
 import os
 
 from aiogram.types import InlineKeyboardMarkup
-from aiogram.utils.keyboard import InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardButton, InlineKeyboardBuilder
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
+def get_confirm_button() -> InlineKeyboardMarkup:
+    keyboard_builder = InlineKeyboardBuilder()
+    keyboard_builder.button(text="Добавить кнопку", callback_data="add_mailing_button")
+    keyboard_builder.button(text="Продолжить без кнопки", callback_data="no_mailing_button")
+    keyboard_builder.adjust(1)
+    return keyboard_builder.as_markup()
+
+
+def add_mailing_button(text_button: str, url_button: str) -> InlineKeyboardMarkup:
+    added_keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(
+                text=text_button,
+                url=url_button
+            )]
+        ]
+    )
+    return added_keyboard
 
 
 buy_subscription_markup = InlineKeyboardMarkup(
@@ -70,3 +90,38 @@ support_button = InlineKeyboardMarkup(
                               callback_data="cancel_main")],
     ]
 )
+
+mail_users_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(
+            text="Всем пользователям",
+            callback_data="send_all_users"
+        )],
+        [InlineKeyboardButton(
+            text="Пользователям с анкетой",
+            callback_data="send_questionnaire_users"
+        )],
+        [InlineKeyboardButton(
+            text="Пользователям без анкеты",
+            callback_data="send_no_questionnaire_users"
+        )],
+        [InlineKeyboardButton(
+            text="Тем кто удалил анкету",
+            callback_data="send_deleted_questionnaire"
+        )],
+    ],
+)
+
+confirm_maling_button = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="Отправить",
+                callback_data="confirm_mailing"
+            )
+        ],
+        [InlineKeyboardButton(
+            text="Отменить",
+            callback_data="cancel_mailing"
+        )],
+    ])

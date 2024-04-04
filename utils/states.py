@@ -29,3 +29,12 @@ class StatesWomanQuestionnaire(StatesGroup):
 
 class UserIdState(StatesGroup):
     USER_ID = State()
+
+
+class MailingState(StatesGroup):
+    CALL_MAILING = State()
+    MAIL_TEXT = State()
+    ADD_PHOTO = State()
+    ADD_BUTTON = State()
+    BUTTON_TEXT = State()
+    BUTTON_URL = State()

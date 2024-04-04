@@ -11,6 +11,7 @@ from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.admin_hendlers import main_admin_router
+from hendlers.admin_mailing_handler import mailing_router
 from hendlers.download_hendlers import download_router
 from hendlers.hendler_commands import router_commands
 from hendlers.states_man import men_questionnaires_router
@@ -40,6 +41,7 @@ async def connect_telegram():
                        main_users_router,
                        main_admin_router,
                        download_router,
+                       mailing_router,
                        )
     create_tables()
     try:
@@ -58,7 +60,7 @@ if __name__ == '__main__':
     telegram_log_handler = TelegramBotHandler()
     logging.basicConfig(
         handlers=logger.addHandler(telegram_log_handler),
-        level=logging.ERROR,
+        level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     db_users = DatabaseUsers()
     db_man_questionnaires = MensQuestionnaires()

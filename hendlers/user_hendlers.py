@@ -13,7 +13,6 @@ from keyboards.inline import buy_subscription_markup, support_button
 from keyboards.replay import main_markup, edit_profile_markup
 from utils.logs_hendler_telegram import TelegramBotHandler
 
-
 logger = logging.getLogger(__name__)
 telegram_log_handler = TelegramBotHandler()
 logging.basicConfig(
