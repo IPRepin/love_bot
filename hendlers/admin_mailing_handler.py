@@ -1,6 +1,8 @@
+import asyncio
 import logging
 
 from aiogram import types, Router, F, Bot
+from aiogram.exceptions import TelegramRetryAfter, TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup
 from pydantic import ValidationError
@@ -72,7 +74,7 @@ async def add_button_mailing(call: types.CallbackQuery,
                              ):
     if call.data == 'add_mailing_button':
         await call.message.answer("Введи текст кнопки, например\n"
-                                  "'🤗Подписаться'", reply_markup=None)
+                                  "🤗Подписаться", reply_markup=None)
         await state.set_state(MailingState.BUTTON_TEXT)
     elif call.data == 'no_mailing_button':
         await call.message.edit_reply_markup(reply_markup=None)
@@ -92,9 +94,12 @@ async def get_text_button(message: types.Message, state: FSMContext):
 
 @mailing_router.message(MailingState.BUTTON_URL)
 async def get_url_button(message: types.Message, state: FSMContext):
-    await state.update_data(button_url=message.text)
-    await state.set_state(MailingState.ADD_MEDIA)
-    await message.answer("Добавь фото к рассылке")
+    try:
+        await state.update_data(button_url=message.text)
+        await state.set_state(MailingState.ADD_MEDIA)
+        await message.answer("Добавь фото к рассылке")
+    except TelegramBadRequest as e:
+        await message.answer("Неверный формат ссылки")
 
 
 async def confirm(
@@ -109,7 +114,7 @@ async def confirm(
                          photo=photo_id,
                          caption=message_text,
                          reply_markup=reply_markup)
-    await message.answer("Вот рассылка которая будет оправлена"
+    await message.answer("Вот рассылка которая будет оправлена\n"
                          "Подтвердить отрпавку.",
                          reply_markup=confirm_maling_button
                          )
@@ -127,6 +132,78 @@ async def sending_mailing(message: types.Message, bot: Bot, state: FSMContext):
                   photo_id=photo_id,
                   message_text=message_text,
                   chat_id=chat_id)
+
+
+async def send_mail(call_users: str,
+                    photo: str,
+                    mailing_text: str,
+                    bot: Bot,
+                    button_message
+                    ):
+    if call_users == "send_all_users":
+        all_users = [user[0] for user in db_users.select_all_user_by_id()]
+        for user in all_users:
+            try:
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+                await asyncio.sleep(0.5)
+            except TelegramRetryAfter as e:
+                logger.error(e)
+                await asyncio.sleep(e.retry_after)
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+    elif call_users == "send_questionnaire_users":
+        send_questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="ЕСТЬ")]
+        for user in send_questionnaire_users:
+            try:
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+                await asyncio.sleep(0.5)
+            except TelegramRetryAfter as e:
+                logger.error(e)
+                await asyncio.sleep(e.retry_after)
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+    elif call_users == "send_no_questionnaire_users":
+        questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="НЕТ")]
+        for user in questionnaire_users:
+            try:
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+                await asyncio.sleep(0.5)
+            except TelegramRetryAfter as e:
+                logger.error(e)
+                await asyncio.sleep(e.retry_after)
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+    elif call_users == "send_deleted_questionnaire":
+        questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="УДАЛЕНА")]
+        for user in questionnaire_users:
+            try:
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
+                await asyncio.sleep(0.5)
+            except TelegramRetryAfter as e:
+                logger.error(e)
+                await asyncio.sleep(e.retry_after)
+                await bot.send_photo(chat_id=user,
+                                     photo=photo,
+                                     caption=mailing_text,
+                                     reply_markup=button_message)
 
 
 @mailing_router.callback_query(
@@ -153,28 +230,34 @@ async def sender_mailing(
                 url_button=button_url,
             )
         except ValidationError as error:
-            logger.error(error)
+            logger.info(error)
             button_message = None
-        if call_users == "send_all_users":
-            all_users = [user[0] for user in db_users.select_all_user_by_id()]
-            for user in all_users:
-                await bot.send_photo(user, photo, caption=mailing_text, reply_markup=button_message)
-        elif call_users == "send_questionnaire_users":
-            questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="ЕСТЬ")]
-            for user in questionnaire_users:
-                await bot.send_photo(user, photo, caption=mailing_text, reply_markup=button_message)
-        elif call_users == "send_no_questionnaire_users":
-            questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="НЕТ")]
-            for user in questionnaire_users:
-                await bot.send_photo(user, photo, caption=mailing_text, reply_markup=button_message)
-        elif call_users == "send_deleted_questionnaire":
-            questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="УДАЛЕНА")]
-            for user in questionnaire_users:
-                await bot.send_photo(user, photo, caption=mailing_text, reply_markup=button_message)
+        try:
+            await call.message.answer(f"К сожалению телеграм имеет ограничения на отправку сообщений "
+                                      f"поэтому отправка может занять определенное время.\n"
+                                      f"Дождитесь уведомления об успешной отправке")
+            await send_mail(
+                call_users,
+                photo,
+                mailing_text,
+                bot,
+                button_message
+            )
+            await call.message.answer(f"Рассылка отправлена")
+        except TelegramBadRequest as e:
+            logger.error(e)
+            await call.message.answer(f"Ошибка при отправке рассылки {e}"
+                                      ",\nпопробуйте создать новую рассылку",
+                                      reply_markup=admin_markup)
     else:
         await state.clear()
         await call.message.answer("Вы отменили рассылку")
     await call.answer()
     await call.message.answer("Главное меню", reply_markup=admin_markup)
-# TODO сделать функции проверок контекта, добавить паузу между сообщениями
-# TODO выявить и обработать исключения
+
+
+@mailing_router.message(MailingState.ADD_MEDIA, ~F.photo)
+async def incorrect_mailing_photo(message: types.Message, state: FSMContext) -> None:
+    await message.answer("Нужно загрузить фотографию!")
+
+# TODO написать тесты
