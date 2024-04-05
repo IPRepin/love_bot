@@ -94,12 +94,9 @@ async def get_text_button(message: types.Message, state: FSMContext):
 
 @mailing_router.message(MailingState.BUTTON_URL)
 async def get_url_button(message: types.Message, state: FSMContext):
-    try:
-        await state.update_data(button_url=message.text)
-        await state.set_state(MailingState.ADD_MEDIA)
-        await message.answer("Добавь фото к рассылке")
-    except TelegramBadRequest as e:
-        await message.answer("Неверный формат ссылки")
+    await state.update_data(button_url=message.text)
+    await state.set_state(MailingState.ADD_MEDIA)
+    await message.answer("Добавь фото к рассылке")
 
 
 async def confirm(
@@ -134,12 +131,12 @@ async def sending_mailing(message: types.Message, bot: Bot, state: FSMContext):
                   chat_id=chat_id)
 
 
-async def send_mail(call_users: str,
-                    photo: str,
-                    mailing_text: str,
-                    bot: Bot,
-                    button_message
-                    ):
+async def send_mails(call_users: str,
+                     photo: str,
+                     mailing_text: str,
+                     bot: Bot,
+                     button_message
+                     ):
     if call_users == "send_all_users":
         all_users = [user[0] for user in db_users.select_all_user_by_id()]
         for user in all_users:
@@ -157,7 +154,8 @@ async def send_mail(call_users: str,
                                      caption=mailing_text,
                                      reply_markup=button_message)
     elif call_users == "send_questionnaire_users":
-        send_questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="ЕСТЬ")]
+        send_questionnaire_users = [user[0] for user in
+                                    db_users.select_all_users_by_params(questionnaire="ЕСТЬ")]
         for user in send_questionnaire_users:
             try:
                 await bot.send_photo(chat_id=user,
@@ -173,7 +171,8 @@ async def send_mail(call_users: str,
                                      caption=mailing_text,
                                      reply_markup=button_message)
     elif call_users == "send_no_questionnaire_users":
-        questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="НЕТ")]
+        questionnaire_users = [user[0] for user in
+                               db_users.select_all_users_by_params(questionnaire="НЕТ")]
         for user in questionnaire_users:
             try:
                 await bot.send_photo(chat_id=user,
@@ -189,7 +188,8 @@ async def send_mail(call_users: str,
                                      caption=mailing_text,
                                      reply_markup=button_message)
     elif call_users == "send_deleted_questionnaire":
-        questionnaire_users = [user[0] for user in db_users.select_all_users_by_params(questionnaire="УДАЛЕНА")]
+        questionnaire_users = [user[0] for user in
+                               db_users.select_all_users_by_params(questionnaire="УДАЛЕНА")]
         for user in questionnaire_users:
             try:
                 await bot.send_photo(chat_id=user,
@@ -233,17 +233,18 @@ async def sender_mailing(
             logger.info(error)
             button_message = None
         try:
-            await call.message.answer(f"К сожалению телеграм имеет ограничения на отправку сообщений "
-                                      f"поэтому отправка может занять определенное время.\n"
-                                      f"Дождитесь уведомления об успешной отправке")
-            await send_mail(
+            await call.message.answer("К сожалению телеграм имеет ограничения "
+                                      "на отправку сообщений "
+                                      "поэтому отправка может занять определенное время.\n"
+                                      "Дождитесь уведомления об успешной отправке")
+            await send_mails(
                 call_users,
                 photo,
                 mailing_text,
                 bot,
                 button_message
             )
-            await call.message.answer(f"Рассылка отправлена")
+            await call.message.answer("Рассылка отправлена")
         except TelegramBadRequest as e:
             logger.error(e)
             await call.message.answer(f"Ошибка при отправке рассылки {e}"
@@ -260,4 +261,4 @@ async def sender_mailing(
 async def incorrect_mailing_photo(message: types.Message, state: FSMContext) -> None:
     await message.answer("Нужно загрузить фотографию!")
 
-# TODO написать тесты
+# TODO написать тесты, уменьшить сложность функции send_mails с 17 до 10 (flake8)

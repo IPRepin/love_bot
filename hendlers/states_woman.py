@@ -21,9 +21,10 @@ from utils.states import StatesWomanQuestionnaire
 logger = logging.getLogger(__name__)
 telegram_log_handler = TelegramBotHandler()
 logging.basicConfig(
-        handlers=logger.addHandler(telegram_log_handler),
-        level=logging.ERROR,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handlers=logger.addHandler(telegram_log_handler),
+    level=logging.ERROR,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 woman_questionnaires_router = Router()
 db = WomanQuestionnaires()

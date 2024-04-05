@@ -10,6 +10,7 @@ logging.basicConfig(
     level=logging.ERROR,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+
 class MensQuestionnaires(DatabaseConnect):
 
     def create_table_men_questionnaires(self):
