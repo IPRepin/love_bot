@@ -5,8 +5,6 @@ from aiogram import types, Router, F, Bot
 from aiogram.exceptions import TelegramRetryAfter, TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup
-from pydantic import ValidationError
-
 from data.sqlite_db_users import DatabaseUsers
 from filters.admins_filter import AdminsFilter, admins_filter
 from keyboards.inline import (mail_users_keyboard,
@@ -14,6 +12,7 @@ from keyboards.inline import (mail_users_keyboard,
                               add_mailing_button,
                               confirm_maling_button)
 from keyboards.replay import admin_markup
+from pydantic import ValidationError
 from utils.logs_hendler_telegram import TelegramBotHandler
 from utils.states import MailingState
 
@@ -137,73 +136,32 @@ async def send_mails(call_users: str,
                      bot: Bot,
                      button_message
                      ):
+    all_users = ''
     if call_users == "send_all_users":
         all_users = [user[0] for user in db_users.select_all_user_by_id()]
-        for user in all_users:
-            try:
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
-                await asyncio.sleep(0.5)
-            except TelegramRetryAfter as e:
-                logger.error(e)
-                await asyncio.sleep(e.retry_after)
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
     elif call_users == "send_questionnaire_users":
-        send_questionnaire_users = [user[0] for user in
-                                    db_users.select_all_users_by_params(questionnaire="ЕСТЬ")]
-        for user in send_questionnaire_users:
-            try:
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
-                await asyncio.sleep(0.5)
-            except TelegramRetryAfter as e:
-                logger.error(e)
-                await asyncio.sleep(e.retry_after)
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
+        all_users = [user[0] for user in
+                     db_users.select_all_users_by_params(questionnaire="ЕСТЬ")]
     elif call_users == "send_no_questionnaire_users":
-        questionnaire_users = [user[0] for user in
-                               db_users.select_all_users_by_params(questionnaire="НЕТ")]
-        for user in questionnaire_users:
-            try:
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
-                await asyncio.sleep(0.5)
-            except TelegramRetryAfter as e:
-                logger.error(e)
-                await asyncio.sleep(e.retry_after)
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
+        all_users = [user[0] for user in
+                     db_users.select_all_users_by_params(questionnaire="НЕТ")]
     elif call_users == "send_deleted_questionnaire":
-        questionnaire_users = [user[0] for user in
-                               db_users.select_all_users_by_params(questionnaire="УДАЛЕНА")]
-        for user in questionnaire_users:
-            try:
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
-                await asyncio.sleep(0.5)
-            except TelegramRetryAfter as e:
-                logger.error(e)
-                await asyncio.sleep(e.retry_after)
-                await bot.send_photo(chat_id=user,
-                                     photo=photo,
-                                     caption=mailing_text,
-                                     reply_markup=button_message)
+        all_users = [user[0] for user in
+                     db_users.select_all_users_by_params(questionnaire="УДАЛЕНА")]
+    for user in all_users:
+        try:
+            await bot.send_photo(chat_id=user,
+                                 photo=photo,
+                                 caption=mailing_text,
+                                 reply_markup=button_message)
+            await asyncio.sleep(0.5)
+        except TelegramRetryAfter as e:
+            logger.error(e)
+            await asyncio.sleep(e.retry_after)
+            await bot.send_photo(chat_id=user,
+                                 photo=photo,
+                                 caption=mailing_text,
+                                 reply_markup=button_message)
 
 
 @mailing_router.callback_query(
