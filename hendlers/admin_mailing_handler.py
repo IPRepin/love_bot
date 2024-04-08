@@ -219,4 +219,4 @@ async def sender_mailing(
 async def incorrect_mailing_photo(message: types.Message, state: FSMContext) -> None:
     await message.answer("Нужно загрузить фотографию!")
 
-# TODO написать тесты, уменьшить сложность функции send_mails с 17 до 10 (flake8)
+
