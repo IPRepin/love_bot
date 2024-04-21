@@ -8,6 +8,9 @@ from logging.handlers import RotatingFileHandler
 
 from datetime import datetime
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import urllib3
 
 
@@ -32,9 +35,10 @@ def setup_bot_logger(name: str):
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
+    logs_pash = os.getenv('LOGS_PASH')
     dt_now = datetime.now()
     dt_now = dt_now.strftime("%Y-%m-%d")
-    log_handler = RotatingFileHandler(f'/opt/love_bot/logs/{dt_now}bot.log', maxBytes=1e6, backupCount=5)
+    log_handler = RotatingFileHandler(f'{logs_pash}/{dt_now}bot.log', maxBytes=1e6, backupCount=5)
     log_handler.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     log_handler.setFormatter(formatter)
