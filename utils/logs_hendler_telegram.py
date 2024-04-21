@@ -34,7 +34,7 @@ def setup_bot_logger(name: str):
     )
     dt_now = datetime.now()
     dt_now = dt_now.strftime("%Y-%m-%d")
-    log_handler = RotatingFileHandler(f'logs/{dt_now}bot.log', maxBytes=1e6, backupCount=5)
+    log_handler = RotatingFileHandler(f'/opt/love_bot/logs/{dt_now}bot.log', maxBytes=1e6, backupCount=5)
     log_handler.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     log_handler.setFormatter(formatter)
