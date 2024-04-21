@@ -42,9 +42,9 @@ def logger_bd(stattement):
     logging.basicConfig(
         level=logging.ERROR,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    logging.info(f"""
-    ________________________________________
-    Executing:
-    {stattement}
-    ________________________________________
-    """)
+    # logging.info(f"""
+    # ________________________________________
+    # Executing:
+    # {stattement}
+    # ________________________________________
+    # """)

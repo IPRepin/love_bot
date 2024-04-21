@@ -10,16 +10,11 @@ from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from filters.admins_filter import AdminsFilter, admins_filter
 from keyboards.inline import moderation_keyboard, download_button
 from utils.auxiliary_module import moderator_text
-from utils.logs_hendler_telegram import TelegramBotHandler
+from utils.logs_hendler_telegram import setup_bot_logger
 from utils.states import UserIdState
 
+setup_bot_logger(__name__)
 logger = logging.getLogger(__name__)
-telegram_log_handler = TelegramBotHandler()
-logging.basicConfig(
-    handlers=logger.addHandler(telegram_log_handler),
-    level=logging.ERROR,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 
 load_dotenv()
 
@@ -85,6 +80,7 @@ async def moderation_questionnaires(query: types.CallbackQuery,
                                   AdminsFilter(admins_filter()),
                                   )
 async def not_moderation_questionnaires(query: types.CallbackQuery):
+    logger.info("not_moderation_questionnaires")
     await query.message.answer("Анкета уже проверена, либо пользователь удалил анкету!")
     await query.answer()
 
@@ -102,6 +98,7 @@ async def next_moderation_questionnaires(message: types.Message,
                              caption=moderator_text(questionnaires),
                              reply_markup=moderation_keyboard,
                              )
+        logging.info(len(questionnaires))
     elif db_woman.select_profile(moderation="Не промодерировано"):
         questionnaires = db_woman.select_profile(moderation="Не промодерировано")
         await state.set_state(UserIdState.USER_ID)
@@ -110,6 +107,7 @@ async def next_moderation_questionnaires(message: types.Message,
                              caption=moderator_text(questionnaires),
                              reply_markup=moderation_keyboard,
                              )
+        logging.info(len(questionnaires))
     else:
         await message.answer("😎Все анкеты проверены!")
 

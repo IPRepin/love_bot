@@ -11,15 +11,7 @@ from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from utils.auxiliary_module import new_file
-from utils.logs_hendler_telegram import TelegramBotHandler
 
-logger = logging.getLogger(__name__)
-telegram_log_handler = TelegramBotHandler()
-logging.basicConfig(
-    handlers=logger.addHandler(telegram_log_handler),
-    level=logging.ERROR,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()

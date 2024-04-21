@@ -22,11 +22,15 @@ class TelegramBotHandler(Handler):
         http.request(method='POST', url=url, fields=post_data)
 
 
-# def setup_logger():
-#     logger_handler = logging.getLogger(__name__)
-#     telegram_log_handler = TelegramBotHandler()
-#     logging.basicConfig(
-#         handlers=logger_handler.addHandler(telegram_log_handler),
-#         level=logging.INFO,
-#         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-#     return logger_handler
+def setup_bot_logger(name: str):
+    logger = logging.getLogger(name)
+    logging.basicConfig(
+        handlers=logger.addHandler(TelegramBotHandler()),
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+
+
+
+
+#TODO добавить логирование ошибок

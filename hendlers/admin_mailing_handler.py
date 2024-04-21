@@ -1,10 +1,11 @@
 import asyncio
-import logging
 
 from aiogram import types, Router, F, Bot
 from aiogram.exceptions import TelegramRetryAfter, TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup
+from pydantic import ValidationError
+
 from data.sqlite_db_users import DatabaseUsers
 from filters.admins_filter import AdminsFilter, admins_filter
 from keyboards.inline import (mail_users_keyboard,
@@ -12,19 +13,10 @@ from keyboards.inline import (mail_users_keyboard,
                               add_mailing_button,
                               confirm_maling_button)
 from keyboards.replay import admin_markup
-from pydantic import ValidationError
-from utils.logs_hendler_telegram import TelegramBotHandler
 from utils.states import MailingState
 
 mailing_router = Router()
 db_users = DatabaseUsers()
-
-logger = logging.getLogger(__name__)
-telegram_log_handler = TelegramBotHandler()
-logging.basicConfig(
-    handlers=logger.addHandler(telegram_log_handler),
-    level=logging.ERROR,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 @mailing_router.message(F.text == '📨Отправить рассылку',
@@ -193,7 +185,7 @@ async def sender_mailing(
         try:
             await call.message.answer("К сожалению телеграм имеет ограничения "
                                       "на отправку сообщений "
-                                      "поэтому отправка может занять определенное время.\n"
+                                      "поэтому отправка может занять некоторое время.\n"
                                       "Дождитесь уведомления об успешной отправке")
             await send_mails(
                 call_users,
@@ -218,5 +210,3 @@ async def sender_mailing(
 @mailing_router.message(MailingState.ADD_MEDIA, ~F.photo)
 async def incorrect_mailing_photo(message: types.Message, state: FSMContext) -> None:
     await message.answer("Нужно загрузить фотографию!")
-
-
