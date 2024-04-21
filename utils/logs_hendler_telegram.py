@@ -4,6 +4,9 @@
 import logging
 import os
 from logging import LogRecord, Handler
+from logging.handlers import RotatingFileHandler
+
+from datetime import datetime
 
 import urllib3
 
@@ -29,6 +32,14 @@ def setup_bot_logger(name: str):
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
+    dt_now = datetime.now()
+    dt_now = dt_now.strftime("%Y-%m-%d")
+    log_handler = RotatingFileHandler(f'logs/{dt_now}bot.log', maxBytes=1e6, backupCount=5)
+    log_handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    log_handler.setFormatter(formatter)
+
+    logger.addHandler(log_handler)
 
 
 

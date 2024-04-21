@@ -15,8 +15,11 @@ from filters.photo_filter import has_face
 from keyboards.inline import send_video
 from keyboards.replay import gen_replay_keyboard, edit_profile_markup
 from utils.auxiliary_module import administrator_text
+from utils.logs_hendler_telegram import setup_bot_logger
 from utils.states import StatesMenQuestionnaire
 
+setup_bot_logger(__name__)
+logger = logging.getLogger(__name__)
 
 men_questionnaires_router = Router()
 db = MensQuestionnaires()

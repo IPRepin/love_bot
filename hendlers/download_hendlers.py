@@ -11,7 +11,10 @@ from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from utils.auxiliary_module import new_file
+from utils.logs_hendler_telegram import setup_bot_logger
 
+setup_bot_logger(__name__)
+logger = logging.getLogger(__name__)
 
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()

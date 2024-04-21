@@ -66,6 +66,6 @@ if __name__ == '__main__':
         logger.info("Bot started")
         asyncio.run(connect_telegram())
     except TelegramRetryAfter as retry_error:
-        logger.exception(retry_error)
+        logger.error(retry_error)
     except KeyboardInterrupt:
-        logger.exception('Bot interrupted')
+        logger.error('Bot interrupted')

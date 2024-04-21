@@ -11,8 +11,12 @@ from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from keyboards.inline import sub_check_button
 from keyboards.replay import main_markup, edit_profile_markup, admin_markup
+from utils.logs_hendler_telegram import setup_bot_logger
 
 load_dotenv()
+
+setup_bot_logger(__name__)
+logger = logging.getLogger(__name__)
 
 router_commands = Router()
 
@@ -29,12 +33,12 @@ async def check_sub_channel(chat_member) -> bool:
 
 @router_commands.message(CommandStart())
 async def get_start(message: types.Message, bot: Bot) -> None:
-    # logger.info(f"Received start message from {message.from_user.id}")
+    logger.info(f"Received start message from {message.from_user.id}")
     if await check_sub_channel(await bot.get_chat_member(chat_id=os.getenv('TG_CHANNEL'),
                                                          user_id=message.from_user.id)):
         try:
             if str(message.from_user.id) not in os.environ.get("ADMINS_ID").split(","):
-                # logger.info(os.environ.get("ADMINS_ID").split(","))
+                logger.info(os.environ.get("ADMINS_ID").split(","))
                 DatabaseUsers().add_user(
                     user_id=message.from_user.id,
                     user_name=message.from_user.first_name,
@@ -57,8 +61,8 @@ async def get_start(message: types.Message, bot: Bot) -> None:
                                      reply_markup=admin_markup
                                      )
         except (sqlite3.IntegrityError, sqlite3.OperationalError) as err:
-            # logger.error(err)
-            # logger.error("Пользователь с таким id уже существует")
+            logger.error(err)
+            logger.error("Пользователь с таким id уже существует")
             if db_men.profile_exists(user_id=message.from_user.id):
                 await message.answer(f"С возвращением {message.from_user.first_name}\n"
                                      f"✅Вы уже заполнили анкету.\n"
@@ -101,7 +105,7 @@ async def check_channel(query: types.CallbackQuery, bot: Bot) -> None:
                                                          user_id=query.from_user.id)):
         try:
             if str(query.from_user.id) not in os.environ.get("ADMINS_ID").split(","):
-                # logger.info(os.environ.get("ADMINS_ID").split(","))
+                logger.info(os.environ.get("ADMINS_ID").split(","))
                 DatabaseUsers().add_user(
                     user_id=query.from_user.id,
                     user_name=query.from_user.first_name,
@@ -125,8 +129,8 @@ async def check_channel(query: types.CallbackQuery, bot: Bot) -> None:
                                            reply_markup=admin_markup
                                            )
         except (sqlite3.IntegrityError, sqlite3.OperationalError) as err:
-            # logger.error(err)
-            # logger.error("Пользователь с таким id уже существует")
+            logger.error(err)
+            logger.error("Пользователь с таким id уже существует")
             if db_men.profile_exists(user_id=query.from_user.id):
                 await query.message.answer(f"С возвращением {query.from_user.first_name}\n"
                                            f"✅Вы уже заполнили анкету.\n"
