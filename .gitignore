@@ -8,3 +8,4 @@ test.py
 db_bot.db
 .venv
 **/*.log
+.env.*
