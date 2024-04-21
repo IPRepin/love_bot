@@ -11,13 +11,14 @@ from data.sqlite_db_users import DatabaseUsers
 from data.sqlite_men_questionnaire import MensQuestionnaires
 from data.sqlite_woman_questionnaire import WomanQuestionnaires
 from hendlers.admin_hendlers import main_admin_router
+from hendlers.admin_mailing_handler import mailing_router
 from hendlers.download_hendlers import download_router
 from hendlers.hendler_commands import router_commands
 from hendlers.states_man import men_questionnaires_router
 from hendlers.states_woman import woman_questionnaires_router
 from hendlers.user_hendlers import main_users_router
 from utils.commands import register_commands
-from utils.logs_hendler_telegram import TelegramBotHandler
+from utils.logs_hendler_telegram import setup_bot_logger
 
 
 def create_tables():
@@ -27,7 +28,7 @@ def create_tables():
         db_woman_questionnaires.create_table_women_questionnaires()
         logger.info("Tables created")
     except Exception as err:
-        logger.error(err)
+        logger.exception(err)
 
 
 async def connect_telegram():
@@ -40,6 +41,7 @@ async def connect_telegram():
                        main_users_router,
                        main_admin_router,
                        download_router,
+                       mailing_router,
                        )
     create_tables()
     try:
@@ -47,25 +49,21 @@ async def connect_telegram():
         await dp.start_polling(bot)
         await register_commands(bot)
     except TelegramNetworkError as telegram_err:
-        logger.error(telegram_err)
+        logger.exception(telegram_err)
     finally:
         await bot.close()
 
 
 if __name__ == '__main__':
     load_dotenv()
+    setup_bot_logger(__name__)
     logger = logging.getLogger(__name__)
-    telegram_log_handler = TelegramBotHandler()
-    logging.basicConfig(
-        handlers=logger.addHandler(telegram_log_handler),
-        level=logging.ERROR,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     db_users = DatabaseUsers()
     db_man_questionnaires = MensQuestionnaires()
     db_woman_questionnaires = WomanQuestionnaires()
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     try:
-        logger.error("Bot started")
+        logger.info("Bot started")
         asyncio.run(connect_telegram())
     except TelegramRetryAfter as retry_error:
         logger.error(retry_error)

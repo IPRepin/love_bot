@@ -4,6 +4,9 @@
 import logging
 import os
 from logging import LogRecord, Handler
+from logging.handlers import RotatingFileHandler
+
+from datetime import datetime
 
 import urllib3
 
@@ -22,11 +25,23 @@ class TelegramBotHandler(Handler):
         http.request(method='POST', url=url, fields=post_data)
 
 
-# def setup_logger():
-#     logger_handler = logging.getLogger(__name__)
-#     telegram_log_handler = TelegramBotHandler()
-#     logging.basicConfig(
-#         handlers=logger_handler.addHandler(telegram_log_handler),
-#         level=logging.INFO,
-#         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-#     return logger_handler
+def setup_bot_logger(name: str):
+    logger = logging.getLogger(name)
+    logging.basicConfig(
+        handlers=logger.addHandler(TelegramBotHandler()),
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    dt_now = datetime.now()
+    dt_now = dt_now.strftime("%Y-%m-%d")
+    log_handler = RotatingFileHandler(f'logs/{dt_now}bot.log', maxBytes=1e6, backupCount=5)
+    log_handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    log_handler.setFormatter(formatter)
+
+    logger.addHandler(log_handler)
+
+
+
+
+#TODO добавить логирование ошибок

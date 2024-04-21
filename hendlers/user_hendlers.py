@@ -11,15 +11,10 @@ from hendlers.states_man import add_photo as men_add_photo
 from hendlers.states_woman import add_photo as women_add_photo
 from keyboards.inline import buy_subscription_markup, support_button
 from keyboards.replay import main_markup, edit_profile_markup
-from utils.logs_hendler_telegram import TelegramBotHandler
+from utils.logs_hendler_telegram import setup_bot_logger
 
-
+setup_bot_logger(__name__)
 logger = logging.getLogger(__name__)
-telegram_log_handler = TelegramBotHandler()
-logging.basicConfig(
-    handlers=logger.addHandler(telegram_log_handler),
-    level=logging.ERROR,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 db_men = MensQuestionnaires()
 db_woman = WomanQuestionnaires()

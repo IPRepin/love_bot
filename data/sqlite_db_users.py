@@ -1,14 +1,7 @@
 import logging
 
 from data.sqlite_connect import DatabaseConnect
-from utils.logs_hendler_telegram import TelegramBotHandler
 
-logger = logging.getLogger(__name__)
-telegram_log_handler = TelegramBotHandler()
-logging.basicConfig(
-    handlers=logger.addHandler(telegram_log_handler),
-    level=logging.ERROR,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class DatabaseUsers(DatabaseConnect):
 
@@ -65,3 +58,12 @@ class DatabaseUsers(DatabaseConnect):
         sql = "DELETE FROM Users WHERE user_id = ?"
         parameters = tuple([user_id])
         return self.execute(sql, parameters, commit=True)
+
+    def select_all_user_by_id(self):
+        sql = "SELECT user_id FROM Users"
+        return self.execute(sql, fetchall=True)
+
+    def select_all_users_by_params(self, **kwargs):
+        sql = "SELECT user_id FROM Users WHERE"
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, fetchall=True)

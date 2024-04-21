@@ -22,7 +22,7 @@ edit_profile_markup = ReplyKeyboardMarkup(keyboard=[
     [
         KeyboardButton(text='🗑️Удалить анкету'),
     ],
-[
+    [
         KeyboardButton(text='📩Связаться с администратором'),
     ],
 ], resize_keyboard=True,
@@ -46,7 +46,10 @@ admin_markup = ReplyKeyboardMarkup(keyboard=[
     ],
     [
         KeyboardButton(text="💾Выгрузить данные пользователей")
-    ]
+    ],
+    # [
+    #     KeyboardButton(text="📨Отправить рассылку")
+    # ],
 ],
     resize_keyboard=True
 )
