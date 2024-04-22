@@ -43,7 +43,7 @@ def setup_bot_logger(name: str):
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     log_handler.setFormatter(formatter)
 
-    logger.addHandler(log_handler)
+    # logger.addHandler(log_handler)
 
 
 
