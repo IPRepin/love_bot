@@ -47,9 +47,9 @@ admin_markup = ReplyKeyboardMarkup(keyboard=[
     [
         KeyboardButton(text="💾Выгрузить данные пользователей")
     ],
-    # [
-    #     KeyboardButton(text="📨Отправить рассылку")
-    # ],
+    [
+        KeyboardButton(text="📨Отправить рассылку")
+    ],
 ],
     resize_keyboard=True
 )
