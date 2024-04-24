@@ -32,7 +32,7 @@ def setup_bot_logger(name: str):
     logger = logging.getLogger(name)
     logging.basicConfig(
         handlers=logger.addHandler(TelegramBotHandler()),
-        level=logging.ERROR,
+        level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     logs_pash = os.getenv('LOGS_PASH')
