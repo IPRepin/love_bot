@@ -1,6 +1,7 @@
 import logging
 
 from aiogram import types, Router, F, Bot
+from aiogram.exceptions import TelegramNetworkError
 from aiogram.fsm.context import FSMContext
 from dotenv import load_dotenv
 
@@ -35,7 +36,7 @@ async def moderation_questionnaires(query: types.CallbackQuery,
     data = await state.get_data()
     await state.clear()
     user_id = data.get('user_id')
-    logger.info(f'user_id: {user_id}')
+    logger.info("Moderation questionnaires started")
     if query.data == 'approved' and db_men.profile_exists(user_id=user_id):
         db_men.update_moderation(user_id=user_id, moderation='Одобрено')
         await query.message.answer("✅Анкета одобрена, пользователю отправлено"
@@ -90,26 +91,28 @@ async def not_moderation_questionnaires(query: types.CallbackQuery):
 async def next_moderation_questionnaires(message: types.Message,
                                          state: FSMContext,
                                          bot: Bot) -> None:
-    if db_men.select_profile(moderation="Не промодерировано"):
-        questionnaires = db_men.select_profile(moderation="Не промодерировано")
-        await state.set_state(UserIdState.USER_ID)
-        await state.update_data(user_id=int(questionnaires[0]))
-        await bot.send_photo(chat_id=message.chat.id, photo=questionnaires[1],
-                             caption=moderator_text(questionnaires),
-                             reply_markup=moderation_keyboard,
-                             )
-        logging.info(len(questionnaires))
-    elif db_woman.select_profile(moderation="Не промодерировано"):
-        questionnaires = db_woman.select_profile(moderation="Не промодерировано")
-        await state.set_state(UserIdState.USER_ID)
-        await state.update_data(user_id=int(questionnaires[0]))
-        await bot.send_photo(chat_id=message.chat.id, photo=questionnaires[1],
-                             caption=moderator_text(questionnaires),
-                             reply_markup=moderation_keyboard,
-                             )
-        logging.info(len(questionnaires))
-    else:
-        await message.answer("😎Все анкеты проверены!")
+    try:
+        logger.info("next_moderation_questionnaires")
+        if db_men.select_profile(moderation="Не промодерировано"):
+            questionnaires = db_men.select_profile(moderation="Не промодерировано")
+            await state.set_state(UserIdState.USER_ID)
+            await state.update_data(user_id=int(questionnaires[0]))
+            await bot.send_photo(chat_id=message.chat.id, photo=questionnaires[1],
+                                 caption=moderator_text(questionnaires),
+                                 reply_markup=moderation_keyboard,
+                                 )
+        elif db_woman.select_profile(moderation="Не промодерировано"):
+            questionnaires = db_woman.select_profile(moderation="Не промодерировано")
+            await state.set_state(UserIdState.USER_ID)
+            await state.update_data(user_id=int(questionnaires[0]))
+            await bot.send_photo(chat_id=message.chat.id, photo=questionnaires[1],
+                                 caption=moderator_text(questionnaires),
+                                 reply_markup=moderation_keyboard,
+                                 )
+        else:
+            await message.answer("😎Все анкеты проверены!")
+    except TelegramNetworkError as telegram_err:
+        logger.exception(telegram_err)
 
 
 @main_admin_router.message(F.text == '💾Выгрузить данные пользователей',

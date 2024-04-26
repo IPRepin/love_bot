@@ -38,7 +38,7 @@ async def get_start(message: types.Message, bot: Bot) -> None:
                                                          user_id=message.from_user.id)):
         try:
             if str(message.from_user.id) not in os.environ.get("ADMINS_ID").split(","):
-                logger.info(os.environ.get("ADMINS_ID").split(","))
+                logger.info("Вход администратора")
                 DatabaseUsers().add_user(
                     user_id=message.from_user.id,
                     user_name=message.from_user.first_name,

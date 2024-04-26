@@ -1,17 +1,16 @@
 '''
 Модуль отправки логов в Telegram
 '''
+import urllib3
 import logging
 import os
+from datetime import datetime
 from logging import LogRecord, Handler
 from logging.handlers import RotatingFileHandler
 
-from datetime import datetime
-
 from dotenv import load_dotenv
-load_dotenv()
 
-import urllib3
+load_dotenv()
 
 
 class TelegramBotHandler(Handler):
@@ -45,7 +44,4 @@ def setup_bot_logger(name: str):
 
     logger.addHandler(log_handler)
 
-
-
-
-#TODO добавить логирование ошибок
+# TODO добавить логирование ошибок
