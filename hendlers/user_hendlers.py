@@ -11,7 +11,6 @@ from hendlers.states_man import add_photo as men_add_photo
 from hendlers.states_woman import add_photo as women_add_photo
 from keyboards.inline import buy_subscription_markup, support_button
 from keyboards.replay import main_markup, edit_profile_markup
-from utils.logs_hendler_telegram import setup_bot_logger
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +49,6 @@ async def buy_subscription(message: types.Message) -> None:
 @main_users_router.message(F.text == "🗑️Удалить анкету")
 async def delete_questionnaires(message: types.Message) -> None:
     logger.info("Функция delete_questionnaires вызвана")
-    logger.info(f"{message.from_user.id}")
     if db_men.profile_exists(user_id=message.from_user.id):
         db_men.delete_profile(user_id=message.from_user.id)
         db_users.availability_questionnaire(questionnaire="УДАЛИЛ",
@@ -88,7 +86,7 @@ async def edit_questionnaires(message: types.Message, state: FSMContext) -> None
 
 @main_users_router.message(F.text == '📩Связаться с администратором')
 async def write_administrator(message: types.Message) -> None:
-    logger.info("Функция edit_questionnaires вызвана")
+    logger.info("Функция write_administrator вызвана")
     await message.answer(f"{message.from_user.first_name} если у вас "
                          f"возникли вопросы по заполнению анкеты, свяжитесь "
                          f"с нами нажав кнопку ниже ⬇️",
