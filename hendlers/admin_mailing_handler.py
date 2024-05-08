@@ -14,10 +14,9 @@ from keyboards.inline import (mail_users_keyboard,
                               add_mailing_button,
                               confirm_maling_button)
 from keyboards.replay import admin_markup
-from utils.logs_hendler_telegram import setup_bot_logger
 from utils.states import MailingState
 
-setup_bot_logger(__name__)
+
 logger = logging.getLogger(__name__)
 
 mailing_router = Router()

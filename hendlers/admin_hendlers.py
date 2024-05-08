@@ -14,7 +14,7 @@ from utils.auxiliary_module import moderator_text
 from utils.logs_hendler_telegram import setup_bot_logger
 from utils.states import UserIdState
 
-setup_bot_logger(__name__)
+
 logger = logging.getLogger(__name__)
 
 load_dotenv()

@@ -56,7 +56,7 @@ async def connect_telegram():
 
 if __name__ == '__main__':
     load_dotenv()
-    setup_bot_logger(__name__)
+    setup_bot_logger()
     logger = logging.getLogger(__name__)
     db_users = DatabaseUsers()
     db_man_questionnaires = MensQuestionnaires()

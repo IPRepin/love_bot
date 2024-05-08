@@ -18,7 +18,6 @@ from utils.auxiliary_module import administrator_text
 from utils.logs_hendler_telegram import setup_bot_logger
 from utils.states import StatesWomanQuestionnaire
 
-setup_bot_logger(__name__)
 logger = logging.getLogger(__name__)
 
 woman_questionnaires_router = Router()
