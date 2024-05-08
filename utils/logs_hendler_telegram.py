@@ -38,10 +38,13 @@ def setup_bot_logger():
     dt_now = datetime.now().strftime("%Y-%m-%d")
     log_file = f"{logs_path}/{dt_now}_bot.log"
     log_handler = RotatingFileHandler(log_file, maxBytes=1e6, backupCount=5)
+    bot_hanndler = TelegramBotHandler()
 
-    formatter = logging.Formatter('%(asctime)s - love_bot -  %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - love_bot -  %(name)s'
+                                  ' - %(levelname)s - %(message)s')
     log_handler.setFormatter(formatter)
+    bot_hanndler.setFormatter(formatter)
     logging.getLogger().addHandler(log_handler)
-    logging.getLogger().addHandler(TelegramBotHandler())
+    logging.getLogger().addHandler(bot_hanndler)
 
 # TODO добавить логирование ошибок
